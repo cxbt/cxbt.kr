@@ -1,0 +1,16 @@
+# Hugo generated files
+public/
+resources/_gen/
+assets/jsconfig.json
+hugo_stats.json
+
+# Hugo executables (sometimes checked in by mistake)
+hugo.exe
+hugo.darwin
+hugo.linux
+
+# Temporary lock file while building
+.hugo_build.lock
+
+# macOS
+.DS_Store

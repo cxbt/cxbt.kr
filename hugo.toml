@@ -1,0 +1,7 @@
+baseURL = 'https://cxbt.kr/'
+languageCode = 'ko-kr'
+title = 'cxbt.kr'
+theme = 'nostyleplease'
+
+[Params]
+  favicon = "favicon-32x32.png"
