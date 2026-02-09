@@ -46,6 +46,7 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/usr/share/caddy/public' }}
+          DEPLOY_RSYNC_PATH: ${{ secrets.DEPLOY_RSYNC_PATH || 'rsync' }}
         run: |
           set -euo pipefail
 
@@ -58,6 +59,7 @@ jobs:
           ssh-keyscan -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
           rsync -az --delete \
+            --rsync-path="$DEPLOY_RSYNC_PATH" \
             -e "ssh -p $DEPLOY_PORT -i ~/.ssh/id_ed25519" \
             public/ \
             "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
