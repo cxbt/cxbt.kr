@@ -44,6 +44,7 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/usr/share/caddy/public' }}
           DEPLOY_RSYNC_PATH: ${{ secrets.DEPLOY_RSYNC_PATH || 'rsync' }}
@@ -53,8 +54,27 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          printf '%s' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          if [ -n "${DEPLOY_SSH_KEY_B64:-}" ]; then
+            # More robust for GitHub Secrets: avoids newline/CRLF issues.
+            printf '%s' "$DEPLOY_SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          else
+            # Support both raw multiline keys and keys pasted as a single line with literal \n.
+            python3 - <<'PY' > ~/.ssh/id_ed25519
+            import os, sys
+            key = os.environ.get("DEPLOY_SSH_KEY", "")
+            if not key:
+              print("DEPLOY_SSH_KEY is empty", file=sys.stderr)
+              raise SystemExit(1)
+            if "\\n" in key and "\n" not in key:
+              key = key.replace("\\n", "\n")
+            key = key.replace("\r", "")
+            sys.stdout.write(key)
+            PY
+          fi
           chmod 600 ~/.ssh/id_ed25519
+
+          # Fail fast with a clear error if the key is malformed/encrypted.
+          ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null
 
           ssh-keyscan -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
