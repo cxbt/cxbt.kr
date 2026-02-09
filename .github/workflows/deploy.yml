@@ -57,19 +57,12 @@ jobs:
           if [ -n "${DEPLOY_SSH_KEY_B64:-}" ]; then
             # More robust for GitHub Secrets: avoids newline/CRLF issues.
             printf '%s' "$DEPLOY_SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
-          else
+          elif [ -n "${DEPLOY_SSH_KEY:-}" ]; then
             # Support both raw multiline keys and keys pasted as a single line with literal \n.
-            python3 - <<'PY' > ~/.ssh/id_ed25519
-            import os, sys
-            key = os.environ.get("DEPLOY_SSH_KEY", "")
-            if not key:
-              print("DEPLOY_SSH_KEY is empty", file=sys.stderr)
-              raise SystemExit(1)
-            if "\\n" in key and "\n" not in key:
-              key = key.replace("\\n", "\n")
-            key = key.replace("\r", "")
-            sys.stdout.write(key)
-            PY
+            python3 -c 'import os,sys; key=os.environ.get("DEPLOY_SSH_KEY",""); key=(key.replace("\\\\n","\\n") if ("\\\\n" in key and "\\n" not in key) else key); key=key.replace("\\r",""); sys.stdout.write(key)' > ~/.ssh/id_ed25519
+          else
+            echo "Missing deploy key: set DEPLOY_SSH_KEY_B64 (recommended) or DEPLOY_SSH_KEY" >&2
+            exit 1
           fi
           chmod 600 ~/.ssh/id_ed25519
 
