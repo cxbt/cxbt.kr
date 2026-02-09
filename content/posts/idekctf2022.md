@@ -2,7 +2,6 @@
 title = 'idekctf2022 writeup'
 date = 2023-01-26T05:35:45Z
 draft = false
-toc = true
 +++
 
 <a name="top"></a>
