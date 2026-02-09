@@ -1,7 +1,7 @@
 +++
 title = 'Base Knowledge for Internet(work)'
 date = 2026-02-06T15:25:20+09:00
-draft = true
+draft = false
 +++
 
 인터넷 데이터 수집을 하려는데, 기반 지식이 부족함을 느꼈다. GPT와 찾아보면서 내용을 정리해봤다.
