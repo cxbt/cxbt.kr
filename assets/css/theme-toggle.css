@@ -1,0 +1,28 @@
+.theme-toggle-inline {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #3548cf;
+  font: inherit;
+  cursor: pointer;
+}
+
+body[a="dark"] .theme-toggle-inline {
+  color: #79a8ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  body[a="auto"] .theme-toggle-inline {
+    color: #79a8ff;
+  }
+}
+
+.theme-toggle-inline .theme-toggle__label {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.theme-toggle-inline:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
