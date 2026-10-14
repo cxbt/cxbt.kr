@@ -3,24 +3,102 @@ name: Deploy (cxbt.kr)
 on:
   push:
     branches: ["main"]
-  workflow_dispatch: {}
+  # YouTube Music library sync. UTC; GitHub may start scheduled runs late.
+  schedule:
+    - cron: "7 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      allow_mass_removal:
+        description: "Accept more than 20% of the library disappearing in one sync"
+        type: boolean
+        default: false
 
+# one deploy at a time; a queued run waits instead of cancelling one that is mid-deploy
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
-  build:
+  # Scheduled and manual runs only: refresh data/music/albums.json and commit it when it changed.
+  # A commit pushed with GITHUB_TOKEN does not trigger another workflow run, so this same run deploys it.
+  sync:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.sync.outputs.changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install
+        run: pip install -r scripts/requirements.txt
+
+      - name: Test sync logic
+        run: python -m unittest scripts/test_sync_ytmusic.py
+
+      - name: Sync YouTube Music library
+        id: sync
+        env:
+          YTMUSIC_AUTH: ${{ secrets.YTMUSIC_AUTH }}
+          YTMUSIC_OAUTH_CLIENT_ID: ${{ secrets.YTMUSIC_OAUTH_CLIENT_ID }}
+          YTMUSIC_OAUTH_CLIENT_SECRET: ${{ secrets.YTMUSIC_OAUTH_CLIENT_SECRET }}
+          ALLOW_MASS_REMOVAL: ${{ inputs.allow_mass_removal && '--allow-mass-removal' || '' }}
+        run: |
+          if [ -z "$YTMUSIC_AUTH" ]; then
+            echo "::warning title=Music sync skipped::YTMUSIC_AUTH secret is not set (see docs/music-archive.md)"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # exit codes: 2 auth · 3 unexpected API response · 4 safety guard · 5 config
+          python scripts/sync_ytmusic.py $ALLOW_MASS_REMOVAL
+
+      - name: Commit album data
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/music/albums.json
+          git commit -m "music: sync YouTube Music library"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 5))
+          done
+          echo "::error::could not push the synced album data"
+          exit 1
+
+  build:
+    needs: sync
+    # push and manual runs always build; scheduled runs only when the library changed.
+    # A failed sync never deploys, so the live site keeps its last good data.
+    if: >-
+      always()
+      && needs.sync.result != 'failure' && needs.sync.result != 'cancelled'
+      && (github.event_name != 'schedule' || needs.sync.outputs.changed == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # a pushed commit builds exactly that commit; sync runs build main including the new data commit
+          ref: ${{ github.event_name == 'push' && github.sha || 'main' }}
           fetch-depth: 0
 
       - name: Init submodules
@@ -33,7 +111,8 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "latest"
+          # pinned: content adapters need >= 0.126, and a pinned version keeps surprise releases out of deploys
+          hugo-version: "0.167.0"
           extended: true
 
       - name: Configure Pages
@@ -49,11 +128,15 @@ jobs:
           path: ./public
 
   deploy:
+    needs: build
+    if: always() && needs.build.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

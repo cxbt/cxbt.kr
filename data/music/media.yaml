@@ -1,0 +1,14 @@
+# 앨범별 대표 트랙 영상 (사람이 직접 관리합니다. 동기화 스크립트는 이 파일을 건드리지 않습니다.)
+#
+# 키는 data/music/albums.json 의 albumId (YouTube Music browseId, 예: MPREb_xxxx) 입니다.
+# YouTube Music 의 albumId 는 YouTube 영상 ID 가 아닙니다. 공식 아티스트/레이블 채널의 영상 ID 를 따로 찾아 적어 주세요.
+#
+#   MPREb_xxxxxxxxxxx:
+#     videoId: dQw4w9WgXcQ   # https://www.youtube.com/watch?v=<videoId> 의 값 (필수)
+#     track: 곡 제목          # 플레이어 아래에 표시 (선택)
+#     start: 35              # 재생 시작 초 (선택)
+#     end: 55                # 재생 종료 초 (선택)
+#
+# 지정하지 않은 앨범은 LP 를 눌러도 플레이어가 열리지 않고 YouTube Music 링크만 보입니다.
+# 임베드가 막힌 영상이면 사이트가 자동으로 "YouTube 에서 열기" 로 대체합니다.
+{}

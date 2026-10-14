@@ -1,0 +1,27 @@
+{{- /* the turntable: picture disc in front, YouTube player panel on its back (filled in by music.js) */ -}}
+{{- $a := . -}}
+<div class="flip" id="flip">
+  <div class="face face--front" id="front">
+    {{- if $a.media }}
+    <button type="button" class="lp-btn" id="lpBtn" aria-label="{{ $a.title }} 대표 트랙 플레이어 열기">
+    {{- else }}
+    <div class="lp-btn" aria-disabled="true">
+    {{- end }}
+      <div class="lp"><div class="lp__disc">
+        {{- with $a.cover }}<img class="lp__art" src="{{ . }}" alt="{{ $a.title }} 앨범 커버가 인쇄된 픽처 디스크" width="1080" height="1080" decoding="async" draggable="false" referrerpolicy="no-referrer">{{ end -}}
+        <span class="lp__grooves"></span>
+      </div><span class="lp__sheen"></span><span class="lp__hole"></span></div>
+    {{ if $a.media }}</button>{{ else }}</div>{{ end }}
+  </div>
+  {{- with $a.media }}
+  <section class="face face--back player" id="player" aria-label="YouTube 플레이어" inert>
+    <div class="player__screen"><div class="player__slot" id="ytSlot"></div></div>
+    <div class="player__bar">
+      <span class="player__track">{{ with .track }}<b>{{ . }}</b> · {{ end }}YouTube</span>
+      <button type="button" class="btn-ghost" id="backBtn"><span aria-hidden="true">◐</span> LP로 돌아가기</button>
+      <a class="player__ext" href="https://www.youtube.com/watch?v={{ .videoId }}" target="_blank" rel="noopener">YouTube ↗</a>
+    </div>
+    <div class="bside" aria-hidden="true"></div>
+  </section>
+  {{- end }}
+</div>

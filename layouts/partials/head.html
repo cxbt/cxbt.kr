@@ -25,4 +25,10 @@
   {{ $themeToggleJs := resources.Get "js/theme_toggle.js" | resources.Minify | resources.Fingerprint "sha512" }}
   <script defer src="{{ $themeToggleJs.Permalink | relURL }}" integrity="{{ $themeToggleJs.Data.Integrity }}"></script>
   {{ if .Params.mathjax }} {{ partial "mathjax.html" . }} {{ end }}
+  {{- if .IsHome }}
+  {{ $entryStyle := resources.Get "music/entry.css" | resources.Minify | resources.Fingerprint "sha512" }}
+  <link rel="stylesheet" href="{{ $entryStyle.RelPermalink }}" integrity="{{ $entryStyle.Data.Integrity }}" />
+  {{ $entryJs := resources.Get "music/entry.js" | js.Build (dict "minify" true "target" "es2020") | resources.Fingerprint "sha512" }}
+  <script defer src="{{ $entryJs.RelPermalink }}" integrity="{{ $entryJs.Data.Integrity }}"></script>
+  {{- end }}
 </head>

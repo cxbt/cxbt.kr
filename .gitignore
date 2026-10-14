@@ -14,3 +14,8 @@ hugo.linux
 
 # macOS
 .DS_Store
+
+# YouTube Music credentials (store them only in GitHub Actions secrets)
+oauth.json
+browser.json
+*.ytmusic.json

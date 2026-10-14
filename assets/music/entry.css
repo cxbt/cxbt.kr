@@ -1,0 +1,29 @@
+/* The ♪ beside the site title on the home page — the way into /music/. Home page only. */
+.home-title { display: flex; align-items: center; gap: .32em; }
+.music-note {
+  position: relative; display: inline-grid; place-items: center; width: .82em; height: .82em;
+  color: inherit !important; text-decoration: none !important; border-radius: 4px;
+  transform-origin: 33% 75%; transition: transform .6s cubic-bezier(.3, .1, .25, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.music-note svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.music-note:hover, .music-note:focus-visible { transform: rotate(-6deg) translateY(-1px) scale(1.04); }
+.music-note:active { transform: scale(.88); transition-duration: .1s; }
+.music-note:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.music-note::after { /* hint label, appears on hover/focus only */
+  content: "music"; position: absolute; left: calc(100% + .5em); top: 50%;
+  font-size: .4em; font-weight: 400; letter-spacing: .08em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  opacity: 0; transform: translate(-4px, -50%) rotate(12deg); transform-origin: left center;
+  transition: opacity .25s, transform .25s; pointer-events: none; color: inherit;
+}
+.music-note:hover::after, .music-note:focus-visible::after { opacity: .55; transform: translate(0, -50%) rotate(12deg); }
+.music-note.is-launching { visibility: hidden; }
+
+/* scene change: the note swells over the page until it is black */
+.scene { position: fixed; inset: 0; z-index: 90; pointer-events: all; }
+.scene__svg { position: absolute; inset: 0; display: block; overflow: visible; }
+.scene__note { transform-box: view-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  .music-note, .music-note::after { transition: none; }
+}

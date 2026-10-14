@@ -1,0 +1,18 @@
+{{- /* liner notes: title, artist, year and (only when one exists) the commentary */ -}}
+{{- $a := . -}}
+<header class="sleeve__head">
+  <div class="title-row"><a class="note-btn note-btn--room" href="{{ "/" | relURL }}" data-back-note aria-label="cxbt.kr 홈으로 돌아가기" title="home">{{ partial "music/note-svg.html" }}</a><h2 class="album-title">{{ $a.title }}</h2></div>
+  <p class="album-artist">{{ delimit $a.artists ", " }}{{ with $a.year }}<span class="album-year">{{ . }}</span>{{ end }}</p>
+</header>
+{{- if not $a.inLibrary }}
+<p class="removed-note">YouTube Music 보관함에서 제거된 앨범입니다. 기록은 그대로 남겨 둡니다.</p>
+{{- end }}
+{{- with $a.note }}
+<section class="sleeve__note" aria-label="개인 코멘터리">
+  <div class="commentary__head"><div class="commentary__meta"><span>{{ .updated }}</span></div></div>
+  <div class="essay-scroll" tabindex="0" aria-label="코멘터리 본문">
+    <div class="essay">{{ .html | safeHTML }}</div>
+    {{- with .labels }}<ul class="tags" aria-label="태그">{{ range . }}<li>#{{ . }}</li>{{ end }}</ul>{{ end }}
+  </div>
+</section>
+{{- end }}

@@ -1,0 +1,178 @@
+/* cxbt.kr /music/ — the record room. Loaded only on /music/ pages (layouts/music/baseof.html).
+   One black, non-scrolling screen: a grey band across the screen, one oversized picture disc breaking
+   out of it, liner notes beside it; the record flips over into the YouTube player. */
+:root {
+  --room: #000000;
+  --room-raised: #0c0c0c;
+  --ink: #f2f0ec;
+  --ink-2: #a8a6a1;
+  --ink-3: #6b6a66;
+  --rule: #262624;
+  --band: #7a7a78;
+  --f-display: "Bodoni Moda", "Gowun Batang", "Times New Roman", serif;
+  --f-essay: "Gowun Batang", "Noto Serif KR", "AppleMyungjo", "Batang", serif;
+  --f-ui: "IBM Plex Sans KR", -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+  --f-mono: "IBM Plex Mono", "IBM Plex Sans KR", ui-monospace, Menlo, Consolas, monospace;
+  --gutter: clamp(16px, 4vw, 48px);
+  color-scheme: dark;
+}
+html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: var(--room); color: var(--ink); -webkit-font-smoothing: antialiased; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* scene change back to the home page: the white note swells over everything (see music.js) */
+.scene { position: fixed; inset: 0; z-index: 90; pointer-events: all; }
+.scene__svg { position: absolute; inset: 0; display: block; overflow: visible; }
+.scene__note { transform-box: view-box; }
+
+.room { position: relative; height: 100vh; height: 100dvh; background: var(--room); color: var(--ink); font-family: var(--f-ui); overflow: hidden; }
+.room, .room *, .room *::before, .room *::after { box-sizing: border-box; }
+.room a { color: inherit; }
+.room :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+/* the deck: everything is placed around one anchor point (--ax, --ay) set by music.js */
+.deck { position: absolute; inset: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); touch-action: pan-y; --peek: 0px;
+  /* no-JS defaults so the server-rendered album is laid out before music.js measures the screen */
+  --D: min(56vh, 30vw); --ax: 24%; --ay: 50%; --band-h: min(44vh, 23vw); --pw: 36vw; --ph: 26vw; --sw: min(56vh, 36vw); --sh: min(56vh, 30vw); --dh: 100vh; --zone: min(56vh, 30vw); }
+/* edge peek: pointing at either side nudges the record and notes toward it; a click there turns the page */
+.deck.is-peeking { cursor: pointer; }
+.stage, .sleeve, .play-hint { translate: var(--peek) 0; transition: translate 1.3s cubic-bezier(.25, .7, .2, 1); }
+.band { position: absolute; left: 0; right: 0; top: var(--ay); height: var(--band-h); transform: translateY(-50%); border-top: 2px solid var(--band); border-bottom: 2px solid var(--band); pointer-events: none; }
+.stage { position: absolute; z-index: 2; left: var(--ax); top: var(--ay); width: var(--sw); height: var(--sh); margin: calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2); perspective: 1700px; perspective-origin: 50% 45%; }
+.sleeve {
+  position: absolute; z-index: 1; left: 44%; width: max(36%, 400px); top: var(--ay); transform: translateY(-50%);
+  /* sized to its text so the whole note reads at a glance; may break out of the band like the record */
+  height: auto; min-height: calc(var(--band-h) - 2 * clamp(12px, 2.4vh, 28px)); max-height: calc(var(--dh) - 24px);
+  display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 1.6vh, 16px);
+  padding: clamp(16px, 1.7vw, 26px); background: var(--room); overflow: hidden;
+}
+.arrow { position: absolute; z-index: 3; top: var(--ay); transform: translateY(-50%); width: clamp(34px, 4.2vw, 64px); height: calc(var(--band-h) * .58); padding: 0; color: var(--ink); cursor: pointer; opacity: 0; transition: opacity .9s, transform .7s cubic-bezier(.25, .7, .2, 1); -webkit-tap-highlight-color: transparent; }
+.arrow svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.arrow path { fill: none; stroke: currentColor; stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+.arrow--prev { left: 3%; }
+.arrow--next { right: 3%; }
+.arrow--prev:hover { transform: translate(-5px, -50%); }
+.arrow--next:hover { transform: translate(5px, -50%); }
+.deck[data-peek="-1"] .arrow--prev, .deck[data-peek="1"] .arrow--next { opacity: .35; }
+.arrow:focus-visible { outline-offset: 2px; opacity: 1; }
+.deck.is-playing .arrow, .deck.is-busy .arrow { opacity: 0; pointer-events: none; }
+.play-hint { position: absolute; z-index: 2; left: var(--ax); top: calc(var(--ay) + var(--D) / 2 + 18px); transform: translateX(-50%); display: flex; align-items: center; gap: 10px; white-space: nowrap; margin: 0; font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .06em; color: var(--ink-2); }
+.play-hint .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); animation: pulse 2.4s infinite; }
+.play-hint.is-off .dot { background: var(--ink-3); animation: none; }
+.play-hint a { color: var(--ink); }
+.deck.is-playing .play-hint { top: calc(var(--ay) + var(--sh) / 2 + 18px); }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(242,240,236,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(242,240,236,0); } }
+
+/* liner notes */
+.sleeve__head { display: grid; gap: 6px; flex: none; }
+/* the way home: a white note before the title, the mirror of the note beside cxbt.kr */
+.title-row { display: flex; align-items: flex-start; gap: .4em; min-width: 0; font-size: clamp(24px, 2.5vw, 40px); }
+.title-row .album-title { min-width: 0; }
+.note-btn {
+  position: relative; display: inline-grid; place-items: center; flex: none; width: .72em; height: .72em; margin-top: .16em; padding: 0;
+  color: var(--ink); border-radius: 4px; transform-origin: 33% 75%; transition: transform .6s cubic-bezier(.3, .1, .25, 1); -webkit-tap-highlight-color: transparent;
+}
+.note-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.note-btn:hover, .note-btn:focus-visible { transform: rotate(6deg) translateY(-1px) scale(1.04); }
+.note-btn:active { transform: scale(.88); transition-duration: .1s; }
+.note-btn.is-launching { visibility: hidden; }
+.album-title { font-family: var(--f-display); font-weight: 400; font-size: clamp(24px, 2.5vw, 40px); line-height: 1.04; margin: 0; letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.album-artist { font-size: 15px; color: var(--ink); margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.album-year { font-family: var(--f-mono); font-size: 11px; color: var(--ink-3); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+.removed-note { margin: 0; font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); border-left: 2px solid var(--ink-3); padding: 2px 0 2px 10px; }
+.sleeve__note { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--rule); padding-top: clamp(10px, 1.6vh, 14px); }
+.commentary__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; flex: none; }
+.commentary__meta { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; display: flex; gap: 10px; flex-wrap: wrap; }
+.essay-scroll { flex: 0 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; scrollbar-color: #444 transparent; }
+.essay { font-family: var(--f-essay); font-size: 15px; line-height: 1.75; color: #e4e2dd; word-break: keep-all; overflow-wrap: break-word; }
+.essay > * { margin: 0 0 .9em; }
+.essay > :last-child { margin-bottom: 0; }
+.essay strong { color: var(--ink); font-weight: 700; }
+.essay em { font-style: italic; color: var(--ink); }
+.essay a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 3px; }
+.essay blockquote { margin-left: 0; padding-left: 1em; border-left: 1px solid var(--ink-3); color: var(--ink-2); font-style: italic; }
+.essay ul, .essay ol { padding-left: 1.1em; }
+.essay li::marker { color: var(--ink-3); }
+.essay code { font-family: var(--f-mono); font-size: .88em; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px 12px; font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); list-style: none; padding: 0; margin: 12px 0 0; }
+
+/* ───────────────────────── THE RECORD (picture disc) ───────────────────────── */
+.lp { position: relative; aspect-ratio: 1; width: 100%; max-width: 100%; border-radius: 50%; isolation: isolate; }
+.lp__disc { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: #111; will-change: transform; backface-visibility: hidden; }
+.lp__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; user-select: none; -webkit-user-drag: none; }
+/* pressed grooves: fine rings, plus the run-out area and lead-in edge of a real pressing */
+.lp__grooves {
+  position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background:
+    radial-gradient(circle, transparent 0 16.5%, rgba(255,255,255,.18) 16.7%, transparent 17.1% 33%, rgba(0,0,0,.22) 33.2%, transparent 33.6%),
+    repeating-radial-gradient(circle, rgba(0,0,0,0) 0 1.6px, rgba(0,0,0,.13) 2px, rgba(0,0,0,0) 2.5px, rgba(255,255,255,.035) 3px, rgba(0,0,0,0) 3.4px),
+    radial-gradient(circle, transparent 0 95.6%, rgba(0,0,0,.55) 96.4%, rgba(255,255,255,.22) 97.8%, rgba(0,0,0,.6) 99.4%);
+  mix-blend-mode: multiply;
+}
+.lp__grooves::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: repeating-radial-gradient(circle, transparent 0 7px, rgba(255,255,255,.035) 7.5px, transparent 8px); mix-blend-mode: screen; }
+/* the light source does not turn with the record, so the sheen stays still */
+.lp__sheen { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: 2; background: conic-gradient(from 210deg, transparent 0deg, rgba(255,255,255,.16) 22deg, transparent 52deg 180deg, rgba(255,255,255,.11) 204deg, transparent 236deg); mix-blend-mode: screen; }
+.lp__hole { position: absolute; z-index: 3; left: 50%; top: 50%; width: 3.4%; height: 3.4%; min-width: 6px; min-height: 6px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--room); box-shadow: 0 0 0 1px rgba(255,255,255,.22), 0 0 0 4px rgba(0,0,0,.25); }
+.lp::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 4; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 48px -18px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04); }
+
+/* ───────────────────────── FLIP → PLAYER ───────────────────────── */
+.flip { position: absolute; inset: 0; transform-style: preserve-3d; }
+.face { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face--front { width: var(--D); height: var(--D); margin: calc(var(--D) / -2) 0 0 calc(var(--D) / -2); }
+.face--back { width: var(--pw); height: var(--ph); margin: calc(var(--ph) / -2) 0 0 calc(var(--pw) / -2); transform: rotateY(180deg); border-radius: 10px; overflow: hidden; background: #050505; box-shadow: 0 0 0 1px var(--rule); }
+.lp-btn { all: unset; display: block; width: 100%; height: 100%; border-radius: 50%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.lp-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 8px; }
+.lp-btn[aria-disabled="true"] { cursor: default; }
+.lp-btn .lp { transition: transform 1s cubic-bezier(.25, .7, .2, 1); }
+.lp-btn:not([aria-disabled="true"]):hover .lp { transform: scale(1.015); }
+/* B-side: plain black vinyl, seen mid-flip before it opens into the player */
+.bside { position: absolute; inset: 0; z-index: 2; pointer-events: none; background:
+    radial-gradient(circle, #1a1a1a 0 3%, #050505 3.2% 16%, #0d0d0d 16.4% 17%, transparent 17.2%),
+    repeating-radial-gradient(circle, #070707 0 2px, #121212 2.5px, #070707 3px), #080808; }
+.player { display: grid; grid-template-rows: 1fr auto; }
+.player__screen { position: relative; background: #000; min-height: 200px; }
+.player__screen iframe, .player__slot { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.player__bar { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-top: 1px solid var(--rule); font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); min-width: 0; background: var(--room-raised); }
+.player__track { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player__track b { color: var(--ink); font-weight: 500; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: none; color: var(--ink); border: 1px solid #3a3a37; border-radius: 2px; padding: 7px 10px; font: inherit; letter-spacing: .06em; cursor: pointer; white-space: nowrap; }
+.btn-ghost:hover { border-color: var(--ink-2); }
+.player__ext { color: var(--ink-2) !important; text-decoration: none; white-space: nowrap; }
+.player__ext:hover { color: var(--ink) !important; }
+.flip.is-open { transform: none !important; }
+.flip.is-open .face--front { visibility: hidden; }
+.flip.is-open .face--back { transform: none; backface-visibility: visible; -webkit-backface-visibility: visible; }
+.flip.is-open .bside { opacity: 0; }
+.yt-ph { position: absolute; inset: 0; display: grid; place-content: center; gap: 8px; text-align: center; padding: 16px; font-family: var(--f-mono); font-size: 11px; color: var(--ink-3); background: repeating-linear-gradient(135deg, #070707 0 10px, #0b0b0b 10px 20px); }
+.yt-ph strong { color: var(--ink); font-weight: 500; font-size: 12.5px; letter-spacing: .04em; }
+.yt-ph .dims { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.yt-ph a { color: var(--ink); }
+
+
+
+/* ───────────────────────── ENTRANCE (after the home page's note scene change) ───────────────────────── */
+.is-entering .band { animation: band-draw 1.6s .1s both cubic-bezier(.6, 0, .2, 1); }
+.is-entering .stage { animation: roll-in 1.9s .5s both cubic-bezier(.2, .6, .15, 1); }
+.is-entering .sleeve, .is-entering .play-hint { animation: fade 1.2s 1.5s both; }
+@keyframes band-draw { from { clip-path: inset(-4px 100% -4px 0); } to { clip-path: inset(-4px 0 -4px 0); } }
+@keyframes roll-in { from { opacity: 0; transform: translateX(-24vw) rotate(-120deg); } }
+@keyframes fade { from { opacity: 0; } }
+
+/* ───────────────────────── STACKED (phones, portrait tablets) ───────────────────────── */
+.deck.is-stack .sleeve { left: 16px; right: 16px; width: auto; transform: none; top: calc(var(--ay) + var(--zone) / 2 + 42px); bottom: 16px; height: auto; min-height: 0; max-height: none; justify-content: flex-start; padding: 18px; }
+.deck.is-stack .sleeve__note, .deck.is-stack .essay-scroll { flex: 1 1 auto; }
+.deck.is-stack .arrow { width: 30px; height: calc(var(--band-h) * .62); }
+.deck.is-stack .arrow--prev { left: 4px; }
+.deck.is-stack .arrow--next { right: 4px; }
+.deck.is-stack .play-hint, .deck.is-stack.is-playing .play-hint { top: calc(var(--ay) + var(--zone) / 2 + 12px); }
+.deck.is-stack .album-title, .deck.is-stack .title-row { font-size: clamp(24px, 7vw, 32px); }
+@media (max-width: 560px) {
+  .player__bar { flex-wrap: wrap; gap: 8px; }
+  .player__track { flex-basis: 100%; }
+}
+
+/* reduced motion: the record stands still, scene changes become instant */
+@media (prefers-reduced-motion: reduce) {
+  .is-entering * { animation: none !important; }
+  .play-hint .dot { animation: none; }
+  .stage, .sleeve, .play-hint { translate: none; transition: none; }
+}

@@ -1,0 +1,46 @@
+{{- /* Joins the three sources by albumId and returns every album, ordered for the carousel:
+       data/music/albums.json  (sync-managed metadata)
+       content/music-notes/*.md (hand-written commentary, front matter `album = "<albumId>"`)
+       data/music/media.yaml   (hand-picked representative video) */ -}}
+{{- $notes := dict -}}
+{{- with site.GetPage "/music-notes" -}}
+  {{- range $p := .RegularPages -}}
+    {{- with $p.Params.album -}}{{- $notes = merge $notes (dict (lower .) $p) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $media := hugo.Data.music.media | default dict -}}
+{{- $items := slice -}}
+{{- with hugo.Data.music.albums -}}
+  {{- range $a := .albums -}}
+    {{- $id := $a.albumId -}}
+    {{- $page := site.GetPage (printf "/music/%s" (lower $id)) -}}
+    {{- $note := "" -}}
+    {{- with index $notes (lower $id) -}}
+      {{- $note = dict "html" (string .Content) "updated" (.Lastmod.Format "2006.01.02") "labels" (.Params.labels | default slice) -}}
+    {{- end -}}
+    {{- $m := "" -}}
+    {{- with index $media $id | default (index $media (lower $id)) -}}
+      {{- if .videoId -}}
+        {{- $m = dict "videoId" (string .videoId) "track" (.track | default "" | string) "start" .start "end" .end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $cover := "" -}}
+    {{- with $a.thumbnailUrl -}}{{- $cover = replaceRE `=w\d+-h\d+` "=w1080-h1080" . -}}{{- end -}}
+    {{- $order := cond $a.inLibrary ($a.libraryIndex | default 0) 1000000 -}}
+    {{- $items = $items | append (dict
+        "id" $id
+        "url" (cond (ne $page nil) $page.RelPermalink "")
+        "title" $a.title
+        "artists" $a.artists
+        "year" $a.releaseYear
+        "type" $a.type
+        "cover" $cover
+        "ytm" $a.youtubeMusicUrl
+        "inLibrary" $a.inLibrary
+        "order" $order
+        "note" $note
+        "media" $m
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{- return sort $items "order" -}}

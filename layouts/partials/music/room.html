@@ -1,0 +1,42 @@
+{{- /* The one-screen record room. Server-renders the current album so the page works and is
+       indexable without JavaScript; music.js then steps through the catalog in place. */ -}}
+{{- $all := partialCached "music/catalog.html" . "music-catalog" -}}
+{{- $list := where $all "inLibrary" true -}}
+{{- $current := "" -}}
+{{- with .Params.albumId -}}
+  {{- $id := . -}}
+  {{- range $all }}{{ if eq .id $id }}{{ $current = . }}{{ end }}{{ end -}}
+{{- else -}}
+  {{- range first 1 $list }}{{ $current = . }}{{ end -}}
+{{- end -}}
+{{- $catalog := resources.FromString "music/catalog.json" (jsonify $all) | fingerprint -}}
+{{- $prev := "" -}}{{- $next := "" -}}
+{{- $n := len $list -}}
+{{- if and $current (gt $n 1) -}}
+  {{- $i := -1 -}}
+  {{- range $k, $v := $list }}{{ if eq $v.id $current.id }}{{ $i = $k }}{{ end }}{{ end -}}
+  {{- if lt $i 0 }}{{ $prev = index $list (sub $n 1) }}{{ $next = index $list 0 -}}
+  {{- else }}{{ $prev = index $list (mod (add $i (sub $n 1)) $n) }}{{ $next = index $list (mod (add $i 1) $n) }}{{ end -}}
+{{- end -}}
+<div class="room" id="room" data-catalog="{{ $catalog.RelPermalink }}" data-home="{{ "/" | relURL }}" data-current="{{ with $current }}{{ .id }}{{ end }}">
+  <h1 class="sr-only">cxbt.kr 음악 아카이브</h1>
+  <main class="deck" id="deck">
+    <div class="band" aria-hidden="true"></div>
+    {{- with $current }}
+    <div class="stage" id="stage">{{ partial "music/stage.html" . }}</div>
+    <p class="play-hint{{ if not .media }} is-off{{ end }}" id="hint">{{ partial "music/hint.html" . }}</p>
+    <article class="sleeve" id="sleeve">{{ partial "music/sleeve.html" . }}</article>
+    {{- if $prev }}
+    <a class="arrow arrow--prev" href="{{ $prev.url }}" data-step="-1" aria-label="이전 레코드: {{ $prev.title }}"><svg viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><path d="M27 2 C 22 20, 12 38, 4 50 C 13 64, 22 80, 34 98"/></svg></a>
+    <a class="arrow arrow--next" href="{{ $next.url }}" data-step="1" aria-label="다음 레코드: {{ $next.title }}"><svg viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true"><path d="M8 6 C 20 18, 30 34, 36 52 C 28 66, 18 80, 6 92"/></svg></a>
+    {{- end }}
+    {{- else }}
+    <article class="sleeve sleeve--empty" id="sleeve">
+      <header class="sleeve__head">
+        <div class="title-row"><a class="note-btn note-btn--room" href="{{ "/" | relURL }}" data-back-note aria-label="cxbt.kr 홈으로 돌아가기" title="home">{{ partial "music/note-svg.html" }}</a><h2 class="album-title">Record Archive</h2></div>
+        <p class="album-artist">아직 동기화된 앨범이 없습니다.</p>
+      </header>
+    </article>
+    {{- end }}
+  </main>
+</div>
