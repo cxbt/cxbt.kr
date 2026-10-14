@@ -180,16 +180,28 @@ def describe_non_json() -> str:
     return f"YouTube Music answered HTTP {r.get('status')} from {r.get('host')} with {what} instead of JSON{hint}"
 
 
+def signed_in(client: Any) -> bool | None:
+    """Ask the library page whether YouTube Music saw a signed-in user.
+
+    Every response carries responseContext.serviceTrackingParams with a `logged_in` flag
+    ("1" or "0"). Returns None when the flag is missing, so a format change does not block syncing.
+    """
+    response = client._send_request("browse", {"browseId": "FEmusic_liked_albums"})
+    for service in (response.get("responseContext") or {}).get("serviceTrackingParams") or []:
+        for param in service.get("params") or []:
+            if param.get("key") == "logged_in":
+                return param.get("value") == "1"
+    return None
+
+
 def fetch_library(client: Any) -> list[dict[str, Any]]:
     from ytmusicapi.exceptions import YTMusicServerError, YTMusicUserError
 
     try:
         # YouTube Music answers a signed-out request with an empty library rather than an error,
         # so confirm the session is signed in before trusting an empty or short result.
-        try:
-            client.get_account_info()
-        except (KeyError, IndexError, TypeError):
-            raise AuthError("the credentials are not signed in to YouTube Music (no account menu); the cookie or token is invalid or expired") from None
+        if signed_in(client) is False:
+            raise AuthError("YouTube Music treated the request as signed out (logged_in=0); the cookie or token is invalid, expired or was not accepted")
         items = client.get_library_albums(limit=None, order="recently_added")
     except YTMusicServerError as exc:
         status = re.search(r"HTTP (\d{3})", str(exc))
