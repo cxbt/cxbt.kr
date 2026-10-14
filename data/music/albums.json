@@ -1,4 +1,693 @@
 {
   "schema": 1,
-  "albums": []
+  "albums": [
+    {
+      "albumId": "MPREb_0LM03WoOBl2",
+      "title": "Nurture",
+      "artists": [
+        "Porter Robinson"
+      ],
+      "releaseYear": 2021,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/POSsrMTES5HT8E9W6y1M--h17DiUG5-aGPMBLvLuiFvmbM8RQuQOYwGxX969CYFzcWLSXKSB0pDC73A=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_0LM03WoOBl2",
+      "inLibrary": true,
+      "libraryIndex": 4,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_2Ovr56FuJOJ",
+      "title": "Sessions: Star Guardian Taliyah (OST from Sessions: Star Guardian Taliyah)",
+      "artists": [
+        "League of Legends"
+      ],
+      "releaseYear": 2022,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/LXCkDcgEsP8wjWTV2Qm5vRWeHFtfXaWzIYDby5y49Xd7snSWrOqDpSN_oq2RH2XL0ZP7lXiX_e2kC6Q=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_2Ovr56FuJOJ",
+      "inLibrary": true,
+      "libraryIndex": 14,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_3f380hSeGcQ",
+      "title": "glisten",
+      "artists": [
+        "Jeremy Zucker"
+      ],
+      "releaseYear": 2018,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/vuHridjkach7BgFgEhXRlUqpteUl32O6Qio5L4WxSzVRmdzPYMQnWx-wg9ruHKiAJqpUwIY12B4kE0QX=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_3f380hSeGcQ",
+      "inLibrary": true,
+      "libraryIndex": 21,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_5wvzVEEfD79",
+      "title": "Ghost Stories",
+      "artists": [
+        "Coldplay"
+      ],
+      "releaseYear": 2014,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/FrPId047QbNpFZfEtUJQDTC2-MGkgo4JPzasmIkdvFLjbQGNppcmRdOFXo6c3swTP_iP-ozTXhu8OBRSOw=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_5wvzVEEfD79",
+      "inLibrary": true,
+      "libraryIndex": 35,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_7HdnOQMfJ3w",
+      "title": "Sentio",
+      "artists": [
+        "Martin Garrix"
+      ],
+      "releaseYear": 2022,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/81wzc-SJFEdsvftdMzGE4JgeXsLpYvneAfUoeV3P95P-6ehlTnMtU6tXclJPIr80A-sPRJAF755OqN8sZw=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_7HdnOQMfJ3w",
+      "inLibrary": true,
+      "libraryIndex": 28,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_7JA7fLM7ZzF",
+      "title": "Funk Wav Bounces Vol.1",
+      "artists": [
+        "Calvin Harris"
+      ],
+      "releaseYear": 2017,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/VHdOBJElHdTf7hsG9c3jlmG68hB_z-jB0KR-lhCQET0ksmn70QWKo_emVsxsxd1oFMTZVEpdWgSq_cM=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_7JA7fLM7ZzF",
+      "inLibrary": true,
+      "libraryIndex": 20,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_8P2AGgBtjka",
+      "title": "racine carrée",
+      "artists": [
+        "Stromae"
+      ],
+      "releaseYear": 2013,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/te8xskFX0HJIvGLahiYmjh5JvzLtGwScFeQd93RyQs0ar7XCDODMSkeeINu74qdAbG9mlI7L7FT_svw=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_8P2AGgBtjka",
+      "inLibrary": true,
+      "libraryIndex": 43,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_9vJdpB71BFc",
+      "title": "Adventure (Deluxe)",
+      "artists": [
+        "Madeon"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/cPTpGD3dTzJv-hq30ZKWVZerWG6wXfd-Qim6gfiEcrIj4sIkpFi35KoaZWjA5XyWHbEat-pS8-MeyEV3=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_9vJdpB71BFc",
+      "inLibrary": true,
+      "libraryIndex": 41,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_BQZvl3BFGay",
+      "title": "Seven",
+      "artists": [
+        "Martin Garrix"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/ZLXCSi15tRtponWDsLpyt14xTn1k8w9sKz8yI8z7mMQ_yXEUL4n4IKh4sHx9ShlA6qEZowZEkQgxa0c=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_BQZvl3BFGay",
+      "inLibrary": true,
+      "libraryIndex": 33,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_Eh7fEBuCmZn",
+      "title": "Warsongs",
+      "artists": [
+        "League of Legends"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/Rl-4cWiX6uuPVulHMSZiSXpNLLbkJmzmwzdQc4P5MhaveTXMRw6BBsBxMijjIcyHGrk0-N8HGNghUMFe=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_Eh7fEBuCmZn",
+      "inLibrary": true,
+      "libraryIndex": 13,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_HX4JPKKRWzI",
+      "title": "NewJeans 2nd EP 'Get Up'",
+      "artists": [
+        "NewJeans"
+      ],
+      "releaseYear": 2023,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/FzLKj6zFEJna0gRNDeZRH4nuQwEyN-YbCaC-bIGLoia6EhirHUachdvdEdR3VdB7pArgFCW8mtpLPL0=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_HX4JPKKRWzI",
+      "inLibrary": true,
+      "libraryIndex": 10,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_IqrDg3flemx",
+      "title": "True Colors",
+      "artists": [
+        "Zedd"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/D7X-taZ7lFriMSFBMsi7qt8s1CXq0aZN22rqUbzHqH8PsjliXBGe_K7utsxpIuieGRediDPS-B9MBylleA=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_IqrDg3flemx",
+      "inLibrary": true,
+      "libraryIndex": 46,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_IrHqyumhmlB",
+      "title": "Fictional Illustrations",
+      "artists": [
+        "Fly by Midnight"
+      ],
+      "releaseYear": 2023,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/vfh6OxY18Tf0jY37LQyhnZlAWV5Xhv1G1nofAt2wT2-T2akMvxWmbdtNQVzOAMD_bFQzwJ6q9BLX72Ta=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_IrHqyumhmlB",
+      "inLibrary": true,
+      "libraryIndex": 19,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_LhOpUrvgn3f",
+      "title": "United We Are",
+      "artists": [
+        "Hardwell"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/UsDVG24raY1ieWyhKV9AJwSq6SyVQqUwhlARqY3bJxMGzHG3AgRI4EiY8F-Pzt3NHwsvevKdf992ALNG=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_LhOpUrvgn3f",
+      "inLibrary": true,
+      "libraryIndex": 30,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_MrPPGBHLsN0",
+      "title": "Chameleon",
+      "artists": [
+        "End of the World"
+      ],
+      "releaseYear": 2020,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/kDWHZIgHFRINnviqXRS9_Uxcj680OfHGcl5G8I1ZNPdLhvvj2gan8WOAS3Ih6IM-IcfkGd1inM3dn78=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_MrPPGBHLsN0",
+      "inLibrary": true,
+      "libraryIndex": 36,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_NjT5fe9ohmv",
+      "title": "Frieren: Beyond Journey's End Original Soundtrack",
+      "artists": [
+        "Evan Call"
+      ],
+      "releaseYear": 2024,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/UtqV8GosEckhIMGQfF_wjtyMvXGGPBRqrNhHN3KPxVwhff6D6Oc_jefQzRbUGrNE2U4PM5VLjC3p1uU=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_NjT5fe9ohmv",
+      "inLibrary": true,
+      "libraryIndex": 16,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_P4iL4F8JkOy",
+      "title": "Her",
+      "artists": [
+        "DPR LIVE"
+      ],
+      "releaseYear": 2017,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/hJU7Bllyq_7pzhZWDjfLE88p1Lomerr4LsrFIs4oDPEAyZZI4DlBU9jPORTeUS-Q7yXfmkLFIe8CQiyS=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_P4iL4F8JkOy",
+      "inLibrary": true,
+      "libraryIndex": 1,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_QHMeWZtzUEO",
+      "title": "lost",
+      "artists": [
+        "Loote"
+      ],
+      "releaseYear": 2019,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/9ilraY4HmVAcSYYM-HhkSO3aSVmrDaQnOXRK1E-yQg-cs4S-3M60WLs_1a85chocWvwuC0UjiWx0EgV3=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_QHMeWZtzUEO",
+      "inLibrary": true,
+      "libraryIndex": 23,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_QOrLb5CshjV",
+      "title": "I met you when I was 18. (the playlist)",
+      "artists": [
+        "Lauv"
+      ],
+      "releaseYear": 2018,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/bzTeC1jSQmoQzktJDxZHuSTRhHXyZy4AyCZdl2FVAjoeMOJ9_JREk3P6XddM6RU93UQL0HcvpWrORoU=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_QOrLb5CshjV",
+      "inLibrary": true,
+      "libraryIndex": 3,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_RJ1S43okDTm",
+      "title": "live from The Forum",
+      "artists": [
+        "LANY"
+      ],
+      "releaseYear": 2022,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/ccB6ZvgWuhYCU6ctRXz7vOfz2UacMjpVHFCL_h5gdmnGG6OmUuOU8aeiQOw9bGCxYpCPXdW8T9V3WIk=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_RJ1S43okDTm",
+      "inLibrary": true,
+      "libraryIndex": 12,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_RTEWzwCLDcY",
+      "title": "New Eyes",
+      "artists": [
+        "Clean Bandit"
+      ],
+      "releaseYear": 2014,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/hfY-sPApb4VaZCf5Fj5m7Uwqu5GklMhWGEYIvzXh5Jop7ywxUNUznxulu0b94TdtIYdAcT6fm9l0jxmN=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_RTEWzwCLDcY",
+      "inLibrary": true,
+      "libraryIndex": 31,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_S5T8xbsFWT7",
+      "title": "To. X - The 5th Mini Album",
+      "artists": [
+        "TAEYEON"
+      ],
+      "releaseYear": 2023,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/lOHDJdhlasRXh3svE14DtWAZMSsiYpIMwEdLCXujcg0pPUHWvi0KpBh_459RNuODWj4s4n9lKCeHkwtP=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_S5T8xbsFWT7",
+      "inLibrary": true,
+      "libraryIndex": 22,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_SA4n4Pms5RR",
+      "title": "Persona 5: Dancing in Starlight Soundtrack",
+      "artists": [
+        "Lyn",
+        "ATLUS Sound Team"
+      ],
+      "releaseYear": 2019,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/mmClEzRLAdQE7f9g9Jyma8t31uZJISi66AL0iQU4fApx0S5m8cDGd_qlrCxLzEyhvWlr2JEq6zD-Pcsmvw=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_SA4n4Pms5RR",
+      "inLibrary": true,
+      "libraryIndex": 26,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_TCOxjL6h6F2",
+      "title": "2 4 : 2 6",
+      "artists": [
+        "Beenzino"
+      ],
+      "releaseYear": 2012,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/5mnC0KzS6PsUJt4crfdQwZqnmaqbNBaGLxgE6jfBJGUo7ALCUFB3wZoZpeIdkzjuTWz22ugwM6ER4eNi=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_TCOxjL6h6F2",
+      "inLibrary": true,
+      "libraryIndex": 6,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_TdMgQjOknkN",
+      "title": "Cloud Nine",
+      "artists": [
+        "Kygo"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/hExAktqrfYUXg8_siVKsk4u0lZnrze_n1WoV-8nOXZFMj_EzFrJX8rN6v4GAWFiWvbHGrr5P1jayvOI=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_TdMgQjOknkN",
+      "inLibrary": true,
+      "libraryIndex": 39,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_UHgnFpCr4JL",
+      "title": "The Juice: Vol. II",
+      "artists": [
+        "Emotional Oranges"
+      ],
+      "releaseYear": 2019,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/x1aJfVvycE3JUA_Hmo6kAzlm0IXLb9OCqio3mHp904M7GSAhPAk-7ur6f17Gs8RieaHsh6J5L_hqLwc=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_UHgnFpCr4JL",
+      "inLibrary": true,
+      "libraryIndex": 11,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_VFlrIgP4KUv",
+      "title": "The Origin Of Love",
+      "artists": [
+        "MIKA"
+      ],
+      "releaseYear": 2012,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/vNfrIa8gMjpqS73XkBCNuSeCTY3lWHOibJgqML-l9j6lwhgwTfUezrK9E3QlILrXWd_Uv41hAAXEK-xZ=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_VFlrIgP4KUv",
+      "inLibrary": true,
+      "libraryIndex": 42,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_VGgoCgLeBPO",
+      "title": "Blue",
+      "artists": [
+        "Jonas Blue"
+      ],
+      "releaseYear": 2018,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/358VKElmVdAaa_-nruzxHhz3bBE1GGtRM_EjfOeNOakV_s4u0ot2PvFxhPAzmQuD9-j66T7M8pevKaYC=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_VGgoCgLeBPO",
+      "inLibrary": true,
+      "libraryIndex": 45,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_WgnrD4XoYKd",
+      "title": "All 4 Nothing",
+      "artists": [
+        "Lauv"
+      ],
+      "releaseYear": 2022,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/sJI1RUnHxL5Q4hramov2wW4IKiZ1ivwrUjHUTKvY55i73llCLw9OgGhSlBtzY7FGrEnWFS-7iYaZFEU=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_WgnrD4XoYKd",
+      "inLibrary": true,
+      "libraryIndex": 2,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_Wpu4v83ZNm9",
+      "title": "18 Months",
+      "artists": [
+        "Calvin Harris"
+      ],
+      "releaseYear": 2012,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/9rzfBD_-p0FtfPmPl6TfztXCCozZe142oy1MokdY6kO6zTiu4Y0ieKj3H0s8EqRxoRyv4234VR68Ax3Ebg=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_Wpu4v83ZNm9",
+      "inLibrary": true,
+      "libraryIndex": 0,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_Xl6eaHltbQx",
+      "title": "gg bb xx",
+      "artists": [
+        "LANY"
+      ],
+      "releaseYear": 2021,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/5yC1PO4IpQ4nw_1_1kx_p1bn6aQov5GofGrpKEbPBc-YhwpAPm7qwd4Fwt3SPdg-m47OGwGykeB4L8OR=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_Xl6eaHltbQx",
+      "inLibrary": true,
+      "libraryIndex": 17,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_accrjsSn2vB",
+      "title": "METRO BOOMIN PRESENTS SPIDER-MAN: ACROSS THE SPIDER-VERSE (SOUNDTRACK FROM AND INSPIRED BY THE MOTION PICTURE)",
+      "artists": [
+        "Metro Boomin"
+      ],
+      "releaseYear": 2023,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/rra9ajpG50BoWyxszMpVqMAloA83Q1p3V4ryNrtDhAriAqvxyNAEAKU0KDs0JoxgDKoSsiWe_GDWong=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_accrjsSn2vB",
+      "inLibrary": true,
+      "libraryIndex": 24,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_cMqw1F6JsWn",
+      "title": "Bleach",
+      "artists": [
+        "Glen Check"
+      ],
+      "releaseYear": 2022,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/7Re_LuLVB4c_2qcdZSC4bDIPs4x5lU5YQiGKiF-jTQh-HZYvjoh975w00rp5KysslIjno0fbOt-Ornsm=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_cMqw1F6JsWn",
+      "inLibrary": true,
+      "libraryIndex": 27,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_ctP6AAjqUHb",
+      "title": "Blood, Sweat & 3 Years",
+      "artists": [
+        "Cash Cash"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/5pMQsZ8Nkfof-KXJGR2QTLRZ36pcqOTkXKosumpZj8wx6rorfx0X9Q1NjiPNwxQazYC1kb3oWyQVzhxz=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_ctP6AAjqUHb",
+      "inLibrary": true,
+      "libraryIndex": 25,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_cxdSyKVl4Ct",
+      "title": "Awake",
+      "artists": [
+        "Illenium"
+      ],
+      "releaseYear": 2017,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/RGo_kT2t4_7Y6XEnPjq7_Hopbyu8PA3h9_v9BHB3eHlW7PYuml1acRr4yDeNW9dfMOvtZxK8RNfDcPGm=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_cxdSyKVl4Ct",
+      "inLibrary": true,
+      "libraryIndex": 47,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_dCqrVMUgBea",
+      "title": "SAILING",
+      "artists": [
+        "AKMU"
+      ],
+      "releaseYear": 2019,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/fu0kUkT0NOAnyiSh7-by8IgWS8o8va1yoBCQa-uDbAkBVQSE1b4rgo9bl87pqkuCv-SLvbCFZe1iCUYY=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_dCqrVMUgBea",
+      "inLibrary": true,
+      "libraryIndex": 38,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_dlNj7nGnYkq",
+      "title": "Blue Neighbourhood",
+      "artists": [
+        "Troye Sivan"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/RwoKJCv_oiwBrrpSWiCnXo7jIid-ST89tEjtuu71BUTdvOGWMyPfUvhjoM-AqrLZQjkLjGFMrNB2z0v3=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_dlNj7nGnYkq",
+      "inLibrary": true,
+      "libraryIndex": 8,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_fbiQplZZoqs",
+      "title": "fever",
+      "artists": [
+        "Against The Current"
+      ],
+      "releaseYear": 2021,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/mx0g7T_tbFhOZFkTtcoVFX_vn8eJ0ZvLHxptslu-DNUlTwo2SQN9atRI5oRr07U9_icZZHYSYMEThQjt=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_fbiQplZZoqs",
+      "inLibrary": true,
+      "libraryIndex": 29,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_fdn3rDTkRH3",
+      "title": "MAYHEM",
+      "artists": [
+        "Lady Gaga"
+      ],
+      "releaseYear": 2025,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/RFK4wHeGqwI3DndbARbRJB21IC0TcmqnrlyjxYK7T-nC8wlIVbfxNaCIFKNvSpchDKmYyVLe1RN36w=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_fdn3rDTkRH3",
+      "inLibrary": true,
+      "libraryIndex": 15,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_fn09oNVvzrv",
+      "title": "Sick Boy",
+      "artists": [
+        "The Chainsmokers"
+      ],
+      "releaseYear": 2018,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/lGx3KnRU7kYkeooolsSW6Y3FpYe-EelcZLWLAmdyWUdEmNunkwUtgWmHlcDsYOFuJdl2WDkyW5F830A5eA=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_fn09oNVvzrv",
+      "inLibrary": true,
+      "libraryIndex": 40,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_ivRv8Z2X3eG",
+      "title": "Caracal (Deluxe)",
+      "artists": [
+        "Disclosure"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/HSAxzJEChd2pTFipiHOlIlChvloOPGgRvcIuyLIKCfH5O6GauzPke3NJO4Rm3hBHI8MKcGtOxXE9esLM=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_ivRv8Z2X3eG",
+      "inLibrary": true,
+      "libraryIndex": 32,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_jsrcqx9Rvjl",
+      "title": "Night Visions",
+      "artists": [
+        "Imagine Dragons"
+      ],
+      "releaseYear": 2012,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/q5PWa2JVJApX31A7QU2vE4RY8i5S_ofYbfpxgDjhz5fagMAxv8ROkEpUr2OAYgYrhzYqJpv0bV94DRCb=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_jsrcqx9Rvjl",
+      "inLibrary": true,
+      "libraryIndex": 44,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_lRIGGxQGMdU",
+      "title": "ALL OUT",
+      "artists": [
+        "K/DA"
+      ],
+      "releaseYear": 2020,
+      "type": "EP",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/mXWw1pIJfqChzQAvQL7jLXbLmk9MmNGqU6aqByHT2TfCiLuGJD4uNVy3NU4aoZaASfHIzhp_Z2dFq07h=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_lRIGGxQGMdU",
+      "inLibrary": true,
+      "libraryIndex": 7,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_mmK0ush7aFC",
+      "title": "Poly Bridge (Original Soundtrack)",
+      "artists": [
+        "Adrian Talens"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/q-qA5v-DF1XiHOe2RcKrSCxExKdvTg4NWjlC-xElUHtvPQwRfbOcXHW07n25y9MXRbLWBz5PeT8XQpI=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_mmK0ush7aFC",
+      "inLibrary": true,
+      "libraryIndex": 34,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_n6rHBDaz2aW",
+      "title": "The Midsummer Station",
+      "artists": [
+        "Owl City"
+      ],
+      "releaseYear": 2012,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/cFmX32MEpos-qHzyzEZyR9aDz2IIBJAsGfTOrhJz93l7Ap1NW-9f1SzlR7Q87cYDr3HCn99mopRht2BauQ=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_n6rHBDaz2aW",
+      "inLibrary": true,
+      "libraryIndex": 37,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_pdS3lGmeCKa",
+      "title": "Hourglass",
+      "artists": [
+        "Mako"
+      ],
+      "releaseYear": 2016,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/SwyJYzmlrB4ThJp5Akj6KHLWp2rDBfemp7Qv8Gymgf9_JIlB_h5JLJrDaS5PpAhL02DIoJuDE7HyiV86=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_pdS3lGmeCKa",
+      "inLibrary": true,
+      "libraryIndex": 18,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_uNk1BDXeOjp",
+      "title": "MV//MNT VOL. 02",
+      "artists": [
+        "VALORANT",
+        "Shyloom"
+      ],
+      "releaseYear": 2023,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/A3DHN2mHCe9PLVB5EpxGg-BZYTglIRdjokqvmzIhVb651QAkgQ4bPX5DD9JDX7QlTqrAJ-cW2mS6AsTGhQ=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_uNk1BDXeOjp",
+      "inLibrary": true,
+      "libraryIndex": 9,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_z4ov2l9Ppnc",
+      "title": "Stories",
+      "artists": [
+        "Avicii"
+      ],
+      "releaseYear": 2015,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/gNvQI_me1i5v3oXEaJCPYpjhYj5yQSObQNnKsBYTZhWqax62D6AslMc1z7Euvl2r6wnvuqWeLzFGUv5R=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_z4ov2l9Ppnc",
+      "inLibrary": true,
+      "libraryIndex": 48,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    },
+    {
+      "albumId": "MPREb_zcczTa57dmi",
+      "title": "The Fastest Time Of Our Lives",
+      "artists": [
+        "Fly By Midnight"
+      ],
+      "releaseYear": 2025,
+      "type": "Album",
+      "thumbnailUrl": "https://yt3.googleusercontent.com/jVdrgw2mbAHAsqi_KSvx-b9Dpi_C5obWbdCT2m5tjZI9koXaK2DKWt9dwXXjCQ432VN5pb0NfHSpAVcT=w544-h544-l90-rj",
+      "youtubeMusicUrl": "https://music.youtube.com/browse/MPREb_zcczTa57dmi",
+      "inLibrary": true,
+      "libraryIndex": 5,
+      "firstSeenAt": "2026-10-14T17:41:09Z"
+    }
+  ]
 }
