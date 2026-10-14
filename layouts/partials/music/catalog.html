@@ -13,7 +13,6 @@
 {{- with hugo.Data.music.albums -}}
   {{- range $a := .albums -}}
     {{- $id := $a.albumId -}}
-    {{- $page := site.GetPage (printf "/music/%s" (lower $id)) -}}
     {{- $note := "" -}}
     {{- with index $notes (lower $id) -}}
       {{- $note = dict "html" (string .Content) "updated" (.Lastmod.Format "2006.01.02") "labels" (.Params.labels | default slice) -}}
@@ -29,7 +28,6 @@
     {{- $order := cond $a.inLibrary ($a.libraryIndex | default 0) 1000000 -}}
     {{- $items = $items | append (dict
         "id" $id
-        "url" (cond (ne $page nil) $page.RelPermalink "")
         "title" $a.title
         "artists" $a.artists
         "year" $a.releaseYear

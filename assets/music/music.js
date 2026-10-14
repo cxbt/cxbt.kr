@@ -1,7 +1,7 @@
 // cxbt.kr /music/ — the record room.
 // The page arrives with one album already rendered by Hugo (layouts/partials/music/*). This script
-// measures the screen, spins the record, steps through the catalog in place (updating the address to
-// /music/<album>/), flips the record into the YouTube player, and plays the scene change back home.
+// measures the screen, spins the record, steps through the catalog in place (the address stays
+// /music/), flips the record into the YouTube player, and plays the scene change back home.
 
 (() => {
   "use strict";
@@ -36,6 +36,30 @@
       state.cur = state.all.find(a => a.id === id) || null;
       state.idx = state.list.findIndex(a => a.id === id);
     });
+
+  /* ───────────── cover preloading ───────────── */
+  // Covers are fetched and decoded ahead of time and the Image objects kept, so a record never rolls in
+  // with its artwork still arriving. The neighbours on both sides are always kept warm.
+  const covers = new Map();
+  function preload(a) {
+    if (!a || !a.cover) return Promise.resolve();
+    let entry = covers.get(a.cover);
+    if (!entry) {
+      const img = new Image();
+      img.referrerPolicy = "no-referrer";
+      img.decoding = "async";
+      img.src = a.cover;
+      entry = { img, ready: (img.decode ? img.decode() : new Promise((ok, no) => { img.onload = ok; img.onerror = no; })).catch(() => {}) };
+      covers.set(a.cover, entry);
+    }
+    return entry.ready;
+  }
+  function warmNeighbours() {
+    const n = state.list.length;
+    if (!n) return;
+    const i = state.idx < 0 ? 0 : state.idx;
+    for (const d of [1, -1, 2, -2]) preload(state.list[(i + d + n * 2) % n]);
+  }
 
   /* ───────────── rendering (mirrors the Hugo partials) ───────────── */
   function stageHTML(a) {
@@ -82,8 +106,8 @@
     const i = state.idx < 0 ? 0 : state.idx;
     const prev = state.list[state.idx < 0 ? n - 1 : (i - 1 + n) % n], next = state.list[state.idx < 0 ? 0 : (i + 1) % n];
     const p = $(".arrow--prev"), q = $(".arrow--next");
-    if (p) { p.href = prev.url; p.setAttribute("aria-label", `이전 레코드: ${prev.title}`); }
-    if (q) { q.href = next.url; q.setAttribute("aria-label", `다음 레코드: ${next.title}`); }
+    if (p) p.setAttribute("aria-label", `이전 레코드: ${prev.title}`);
+    if (q) q.setAttribute("aria-label", `다음 레코드: ${next.title}`);
   }
   function fill(a) {
     state.cur = a;
@@ -95,8 +119,6 @@
     deck.classList.remove("is-playing");
     setHint();
     setArrows();
-    document.title = `${a.title} · music · cxbt.kr`;
-    if (a.url && location.pathname !== a.url) history.replaceState(null, "", a.url);
     layout();
     startSpin();
   }
@@ -165,12 +187,14 @@
     deck.classList.add("is-busy");
     setPeek(0);
     const next = state.idx < 0 ? (dir > 0 ? 0 : n - 1) : (state.idx + dir + n) % n;
+    const coverReady = preload(state.list[next]); // usually already warm; otherwise loads while the old record rolls out
     const far = Math.round(innerWidth * .32);
     if (!reduced()) {
       const out = stage.animate([{ transform: "none", opacity: 1 }, { transform: `translateX(${-dir * far}px) rotate(${-dir * 110}deg)`, opacity: 0 }],
         { duration: 900, easing: "cubic-bezier(.45,0,.75,.35)", fill: "forwards" });
       const fadeOut = sleeve.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-out", fill: "forwards" });
       await done(out, 900);
+      await Promise.race([coverReady, new Promise(r => setTimeout(r, 1500))]); // a slow network waits a little, never forever
       fill(state.list[next]);
       if (spin) { spin.playbackRate = 0; spin.pause(); } // hold it upright while it rolls in
       out.cancel(); fadeOut.cancel();
@@ -182,6 +206,7 @@
     } else {
       fill(state.list[next]);
     }
+    warmNeighbours();
     deck.classList.remove("is-busy");
     busy = false;
     const a = state.cur;
@@ -427,5 +452,5 @@
   layout();
   startSpin();
   if (root.classList.contains("is-entering")) setTimeout(() => root.classList.remove("is-entering"), 3400);
-  catalog.then(setArrows);
+  catalog.then(() => { setArrows(); warmNeighbours(); });
 })();

@@ -11,7 +11,6 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 | `content/music-notes/<albumId>.md` | 개인 코멘터리 (Markdown) | 사람 |
 | `data/music/media.yaml` | 앨범별 대표 트랙 영상 | 사람 |
 | `scripts/sync_ytmusic.py` | 동기화 스크립트 | — |
-| `content/music/_content.gotmpl` | 앨범마다 `/music/<albumId>/` 페이지 생성 | — |
 | `layouts/music/`, `layouts/partials/music/` | 음악 페이지 템플릿 | — |
 | `assets/music/` | 음악 페이지 CSS/JS, 홈 음표(`entry.*`) | — |
 
@@ -114,7 +113,7 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 ## 5. 코멘터리 쓰기
 
 `content/music-notes/<albumId>.md` 파일을 만들거나 GitHub 웹에서 편집해 커밋하면 몇 분 안에 반영됩니다.
-`albumId` 는 `data/music/albums.json` 이나 앨범 페이지 주소(`/music/mpreb_…/`, 소문자로 바뀜)에서 확인합니다. 파일 안의 `album` 값은 **원래 대소문자 그대로** 적어야 합니다.
+`albumId` 는 `data/music/albums.json` 에서 확인합니다. (음악 페이지 주소는 앨범과 관계없이 항상 `/music/` 입니다.) 파일 안의 `album` 값은 **원래 대소문자 그대로** 적어야 합니다.
 
 ```toml
 +++
