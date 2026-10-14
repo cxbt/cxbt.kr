@@ -121,13 +121,71 @@ def inspect_auth() -> None:
         print(f"  cookie names: {', '.join(names)}")
 
 
+ORIGIN = "https://music.youtube.com"
+SID_SCHEMES = (("SAPISIDHASH", ("SAPISID", "__Secure-3PAPISID")), ("SAPISID1PHASH", ("__Secure-1PAPISID",)), ("SAPISID3PHASH", ("__Secure-3PAPISID",)))
+
+
+def cookie_map(cookie: str) -> dict[str, str]:
+    pairs = (c.split("=", 1) for c in cookie.split(";") if "=" in c)
+    return {k.strip(): v.strip() for k, v in pairs}
+
+
+def sid_authorization(cookies: dict[str, str], user_session_id: str | None, now: float | None = None) -> str:
+    """The Authorization value current browsers send: one hash per SAPISID cookie, and when the page
+    exposes a user session id, that id is hashed in too and flagged with a trailing `_u`."""
+    import hashlib
+    import time
+
+    stamp = str(int(now if now is not None else time.time()))
+    out = []
+    for scheme, names in SID_SCHEMES:
+        sid = next((cookies[n] for n in names if cookies.get(n)), None)
+        if not sid:
+            continue
+        parts = ([user_session_id] if user_session_id else []) + [stamp, sid, ORIGIN]
+        digest = hashlib.sha1(" ".join(parts).encode()).hexdigest()
+        out.append(f"{scheme} {stamp}_{digest}" + ("_u" if user_session_id else ""))
+    return " ".join(out)
+
+
+def browser_client_class(base: Any) -> Any:
+    class BrowserSession(base):  # type: ignore[misc, valid-type]
+        """ytmusicapi's YTMusic, able to switch to the newer multi-hash Authorization header."""
+
+        modern_auth = False
+        user_session_id: str | None = None
+        cookies_for_hash: dict[str, str] = {}
+
+        @property
+        def headers(self) -> Any:
+            headers = base.headers.fget(self)
+            if self.modern_auth:
+                headers["authorization"] = sid_authorization(self.cookies_for_hash, self.user_session_id)
+            return headers
+
+        def read_page_session(self) -> dict[str, Any]:
+            """Open music.youtube.com with the cookie and read what the page itself says about the session."""
+            from ytmusicapi.constants import USER_AGENT
+
+            cookie = "; ".join(f"{k}={v}" for k, v in self.cookies_for_hash.items())
+            page = self._session.get(ORIGIN + "/", headers={"cookie": cookie, "user-agent": USER_AGENT, "accept-language": "en-US,en;q=0.8"}, timeout=30).text
+            logged = re.search(r'"LOGGED_IN"\s*:\s*(true|false)', page)
+            sid = re.search(r'"USER_SESSION_ID"\s*:\s*"(\d+)"', page) or re.search(r'"DATASYNC_ID"\s*:\s*"(\d+)\|\|', page)
+            return {"logged_in": None if not logged else logged.group(1) == "true", "user_session_id": sid.group(1) if sid else None}
+
+    return BrowserSession
+
+
 def make_client() -> Any:
     auth = read_auth()
 
     from ytmusicapi import OAuthCredentials, YTMusic
 
+    cookies: dict[str, str] = {}
     if "refresh_token" not in auth:
         auth = browser_headers(auth)
+        cookies = cookie_map(str(auth["cookie"]))
+        YTMusic = browser_client_class(YTMusic)  # noqa: N806
 
     client_id = os.environ.get("YTMUSIC_OAUTH_CLIENT_ID", "").strip()
     client_secret = os.environ.get("YTMUSIC_OAUTH_CLIENT_SECRET", "").strip()
@@ -137,9 +195,12 @@ def make_client() -> Any:
     creds = OAuthCredentials(client_id=client_id, client_secret=client_secret) if is_oauth else None
     session = requests_session()
     try:
-        return YTMusic(auth, oauth_credentials=creds, requests_session=session)
+        client = YTMusic(auth, oauth_credentials=creds, requests_session=session)
     except Exception as exc:  # message may echo header values, so only the type is logged
         raise AuthError(f"could not initialise the client ({type(exc).__name__})") from None
+    if cookies:
+        client.cookies_for_hash = cookies
+    return client
 
 
 LAST_RESPONSE: dict[str, Any] = {}
@@ -201,7 +262,18 @@ def fetch_library(client: Any) -> list[dict[str, Any]]:
         # YouTube Music answers a signed-out request with an empty library rather than an error,
         # so confirm the session is signed in before trusting an empty or short result.
         if signed_in(client) is False:
-            raise AuthError("YouTube Music treated the request as signed out (logged_in=0); the cookie or token is invalid, expired or was not accepted")
+            if not hasattr(client, "read_page_session"):
+                raise AuthError("YouTube Music treated the OAuth request as signed out (logged_in=0); the token is invalid or expired")
+            # ytmusicapi signs with the legacy single SAPISIDHASH; retry the way current browsers sign
+            page = client.read_page_session()
+            client.user_session_id = page["user_session_id"]
+            client.modern_auth = True
+            log.info("legacy auth was treated as signed out; retrying with browser-style hashes (page logged_in=%s, session id %s)",
+                     page["logged_in"], "found" if page["user_session_id"] else "not found")
+            if signed_in(client) is False:
+                if page["logged_in"] is False:
+                    raise AuthError("the cookie is signed out (music.youtube.com itself shows LOGGED_IN=false); copy fresh headers from a signed-in tab")
+                raise AuthError("the cookie looks signed in, but YouTube Music did not accept the request signature (logged_in=0 with both legacy and browser-style hashes)")
         items = client.get_library_albums(limit=None, order="recently_added")
     except YTMusicServerError as exc:
         status = re.search(r"HTTP (\d{3})", str(exc))
