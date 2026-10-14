@@ -74,9 +74,7 @@
     if (!hint || !a) return;
     if (isOpen) { hint.className = "play-hint"; hint.innerHTML = `<span class="dot" aria-hidden="true"></span>플레이어를 닫으면 재생이 멈춥니다 · Esc`; return; }
     hint.className = "play-hint" + (a.media ? "" : " is-off");
-    hint.innerHTML = a.media
-      ? `<span class="dot" aria-hidden="true"></span>레코드를 눌러 재생`
-      : `<span class="dot" aria-hidden="true"></span>대표 영상 미지정 · <a href="${esc(a.ytm)}" target="_blank" rel="noopener">YouTube Music ↗</a>`;
+    hint.innerHTML = a.media ? `<span class="dot" aria-hidden="true"></span>레코드를 눌러 재생` : "";
   }
   function setArrows() {
     const n = state.list.length;
@@ -126,11 +124,12 @@
   /* ───────────── spin (Web Animations, so it can coast to a stop and spin back up) ───────────── */
   let spin = null, isOpen = false, busy = false, yt = null, mountToken = 0;
   function startSpin() {
+    rampSpin.id++; // a ramp still running for the previous record must not drive this one
     spin?.cancel(); spin = null;
     const disc = $("#stage .lp__disc");
     if (!disc || reduced()) return;
     spin = disc.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: SPIN_SECONDS * 1000, iterations: Infinity });
-    spin.currentTime = Math.random() * SPIN_SECONDS * 1000;
+    spin.currentTime = 0; // every record starts upright, artwork the right way up
     if (document.hidden) spin.pause();
   }
   rampSpin.id = 0;
@@ -173,11 +172,13 @@
       const fadeOut = sleeve.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-out", fill: "forwards" });
       await done(out, 900);
       fill(state.list[next]);
+      if (spin) { spin.playbackRate = 0; spin.pause(); } // hold it upright while it rolls in
       out.cancel(); fadeOut.cancel();
       const inn = stage.animate([{ transform: `translateX(${dir * far}px) rotate(${dir * 110}deg)`, opacity: 0 }, { transform: "none", opacity: 1 }],
         { duration: 1400, easing: "cubic-bezier(.2,.6,.15,1)", fill: "backwards" });
       sleeve.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 500, easing: "ease-in-out", fill: "backwards" });
       await done(inn, 1400);
+      if (spin) { spin.playbackRate = 0; rampSpin(1, 1600); } // then let it start turning
     } else {
       fill(state.list[next]);
     }

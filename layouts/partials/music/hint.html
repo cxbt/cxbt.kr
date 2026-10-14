@@ -1,5 +1,4 @@
+{{- /* only records with a representative video invite a click; the rest stay quiet */ -}}
 {{- if .media -}}
 <span class="dot" aria-hidden="true"></span>레코드를 눌러 재생
-{{- else -}}
-<span class="dot" aria-hidden="true"></span>대표 영상 미지정 · <a href="{{ .ytm }}" target="_blank" rel="noopener">YouTube Music ↗</a>
 {{- end -}}
