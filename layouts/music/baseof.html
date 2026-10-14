@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#000000">
   <title>{{ block "title" . }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ block "description" . }}{{ .Description | default "YouTube Music 보관함에 저장한 앨범과 개인적인 기록" }}{{ end }}">
   <link rel="canonical" href="{{ .Permalink }}">
   <link rel="shortcut icon" type="image/x-icon" href="{{ site.Params.favicon | relURL }}">
-  {{- /* arriving from the home page's note: play the entrance once (set by entry.js) */}}
-  <script>try{if(sessionStorage.getItem("cxbt:music-enter")){sessionStorage.removeItem("cxbt:music-enter");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("is-entering")}}catch(e){}</script>
+  {{- /* before first paint: the room follows the home page's theme (a light home opens onto a white room,
+         a dark home onto the black one), and arriving through the home page's note plays the entrance once (flag set by entry.js) */}}
+  <script>(function(){var d=document.documentElement,p="auto";try{p=localStorage.getItem("nostyleplease-appearance")||"auto"}catch(e){}
+if(p==="light"||(p!=="dark"&&!matchMedia("(prefers-color-scheme: dark)").matches)){d.setAttribute("data-room","light");var m=document.querySelector('meta[name="theme-color"]');if(m)m.content="#ffffff"}
+try{if(sessionStorage.getItem("cxbt:music-enter")){sessionStorage.removeItem("cxbt:music-enter");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("is-entering")}}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">

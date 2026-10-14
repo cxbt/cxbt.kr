@@ -9,12 +9,33 @@
   --ink-3: #6b6a66;
   --rule: #262624;
   --band: #7a7a78;
+  --essay: #e4e2dd;
+  --scroll: #444444;
+  --ghost-border: #3a3a37;
+  --pulse: 242, 240, 236;
+  --lp-shadow: rgba(0, 0, 0, .9);
   --f-display: "Bodoni Moda", "Gowun Batang", "Times New Roman", serif;
   --f-essay: "Gowun Batang", "Noto Serif KR", "AppleMyungjo", "Batang", serif;
   --f-ui: "IBM Plex Sans KR", -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
   --f-mono: "IBM Plex Mono", "IBM Plex Sans KR", ui-monospace, Menlo, Consolas, monospace;
   --gutter: clamp(16px, 4vw, 48px);
   color-scheme: dark;
+}
+/* the room follows the home page's theme: a light home opens onto this white room (set in baseof.html) */
+:root[data-room="light"] {
+  --room: #ffffff;
+  --room-raised: #f3f2ef;
+  --ink: #0d0d0c;
+  --ink-2: #55534f;
+  --ink-3: #8c8a85;
+  --rule: #e3e1dc;
+  --band: #8f8d89;
+  --essay: #23221f;
+  --scroll: #c9c7c2;
+  --ghost-border: #c9c7c2;
+  --pulse: 13, 13, 12;
+  --lp-shadow: rgba(0, 0, 0, .28);
+  color-scheme: light;
 }
 html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; background: var(--room); color: var(--ink); -webkit-font-smoothing: antialiased; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -60,7 +81,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: non
 .play-hint.is-off .dot { background: var(--ink-3); animation: none; }
 .play-hint a { color: var(--ink); }
 .deck.is-playing .play-hint { top: calc(var(--ay) + var(--sh) / 2 + 18px); }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(242,240,236,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(242,240,236,0); } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(var(--pulse), .5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(var(--pulse), 0); } }
 
 /* liner notes */
 .sleeve__head { display: grid; gap: 6px; flex: none; }
@@ -82,8 +103,8 @@ html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: non
 .sleeve__note { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--rule); padding-top: clamp(10px, 1.6vh, 14px); }
 .commentary__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; flex: none; }
 .commentary__meta { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; display: flex; gap: 10px; flex-wrap: wrap; }
-.essay-scroll { flex: 0 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; scrollbar-color: #444 transparent; }
-.essay { font-family: var(--f-essay); font-size: 15px; line-height: 1.75; color: #e4e2dd; word-break: keep-all; overflow-wrap: break-word; }
+.essay-scroll { flex: 0 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; scrollbar-color: var(--scroll) transparent; }
+.essay { font-family: var(--f-essay); font-size: 15px; line-height: 1.75; color: var(--essay); word-break: keep-all; overflow-wrap: break-word; }
 .essay > * { margin: 0 0 .9em; }
 .essay > :last-child { margin-bottom: 0; }
 .essay strong { color: var(--ink); font-weight: 700; }
@@ -112,7 +133,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: non
 /* the light source does not turn with the record, so the sheen stays still */
 .lp__sheen { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: 2; background: conic-gradient(from 210deg, transparent 0deg, rgba(255,255,255,.16) 22deg, transparent 52deg 180deg, rgba(255,255,255,.11) 204deg, transparent 236deg); mix-blend-mode: screen; }
 .lp__hole { position: absolute; z-index: 3; left: 50%; top: 50%; width: 3.4%; height: 3.4%; min-width: 6px; min-height: 6px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--room); box-shadow: 0 0 0 1px rgba(255,255,255,.22), 0 0 0 4px rgba(0,0,0,.25); }
-.lp::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 4; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 48px -18px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04); }
+.lp::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 4; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 48px -18px var(--lp-shadow), 0 0 0 1px rgba(255,255,255,.04); }
 
 /* ───────────────────────── FLIP → PLAYER ───────────────────────── */
 .flip { position: absolute; inset: 0; transform-style: preserve-3d; }
@@ -134,7 +155,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: non
 .player__bar { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-top: 1px solid var(--rule); font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); min-width: 0; background: var(--room-raised); }
 .player__track { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .player__track b { color: var(--ink); font-weight: 500; }
-.btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: none; color: var(--ink); border: 1px solid #3a3a37; border-radius: 2px; padding: 7px 10px; font: inherit; letter-spacing: .06em; cursor: pointer; white-space: nowrap; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: none; color: var(--ink); border: 1px solid var(--ghost-border); border-radius: 2px; padding: 7px 10px; font: inherit; letter-spacing: .06em; cursor: pointer; white-space: nowrap; }
 .btn-ghost:hover { border-color: var(--ink-2); }
 .player__ext { color: var(--ink-2) !important; text-decoration: none; white-space: nowrap; }
 .player__ext:hover { color: var(--ink) !important; }
@@ -142,10 +163,11 @@ html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: non
 .flip.is-open .face--front { visibility: hidden; }
 .flip.is-open .face--back { transform: none; backface-visibility: visible; -webkit-backface-visibility: visible; }
 .flip.is-open .bside { opacity: 0; }
-.yt-ph { position: absolute; inset: 0; display: grid; place-content: center; gap: 8px; text-align: center; padding: 16px; font-family: var(--f-mono); font-size: 11px; color: var(--ink-3); background: repeating-linear-gradient(135deg, #070707 0 10px, #0b0b0b 10px 20px); }
-.yt-ph strong { color: var(--ink); font-weight: 500; font-size: 12.5px; letter-spacing: .04em; }
-.yt-ph .dims { color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.yt-ph a { color: var(--ink); }
+/* the player screen stays dark in both rooms (it is the video), so its fallback text keeps fixed light colours */
+.yt-ph { position: absolute; inset: 0; display: grid; place-content: center; gap: 8px; text-align: center; padding: 16px; font-family: var(--f-mono); font-size: 11px; color: #8a8883; background: repeating-linear-gradient(135deg, #070707 0 10px, #0b0b0b 10px 20px); }
+.yt-ph strong { color: #f2f0ec; font-weight: 500; font-size: 12.5px; letter-spacing: .04em; }
+.yt-ph .dims { color: #a8a6a1; font-variant-numeric: tabular-nums; }
+.yt-ph a { color: #f2f0ec; }
 
 
 

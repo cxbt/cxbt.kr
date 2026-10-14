@@ -1,6 +1,6 @@
 // The ♪ beside the site title: a plain link to /music/ that this script turns into a scene change.
-// The note reacts, travels to the centre and swells until the page is black, then the browser
-// navigates; /music/ sees the session flag and plays its own entrance (layouts/music/baseof.html).
+// The note reacts, hollows into an outline on its way to the centre and swells like a doorway, wiping the
+// page down to its background (the music room shares it), then the browser navigates; /music/ sees the session flag and plays its own entrance (layouts/music/baseof.html).
 
 (() => {
   "use strict";
@@ -46,9 +46,10 @@
     const color = getComputedStyle(link).color;
     note.style.transformOrigin = `${hx}px ${hy}px`;
     note.style.color = color;
-    // on the dark theme a black note would vanish, so it carries a hairline edge
-    const bg = getComputedStyle(document.body).backgroundColor;
-    if (/^rgba?\(0, 0, 0/.test(bg)) note.style.cssText += ";stroke:rgba(255,255,255,.55);stroke-width:1";
+    // the music room follows this page's theme, so the note empties into the shared background colour
+    const roomBg = getComputedStyle(document.body).backgroundColor;
+    note.style.stroke = color;
+    note.style.strokeWidth = "1.5";
     note.querySelectorAll("path").forEach(p => p.setAttribute("vector-effect", "non-scaling-stroke"));
     document.body.append(scene);
     link.classList.add("is-launching");
@@ -58,12 +59,12 @@
       { transform: "translate(0,0) rotate(0deg) scale(1)", easing: "cubic-bezier(.4,0,.3,1)" },
       { transform: "translate(0,0) rotate(4deg) scale(.9)", offset: .1, easing: "cubic-bezier(.4,0,.3,1)" },       // 1. reacts
       { transform: "translate(0,0) rotate(-3deg) scale(1.15)", offset: .22, easing: "cubic-bezier(.45,0,.25,1)" },
-      { transform: `translate(${dx}px,${dy}px) rotate(-6deg) scale(${mid})`, offset: .58, easing: "cubic-bezier(.7,0,.85,.4)" }, // 2. to the centre
-      { transform: `translate(${dx}px,${dy}px) rotate(10deg) scale(${big})` }                                       // 3. swells over everything
+      { transform: `translate(${dx}px,${dy}px) rotate(-6deg) scale(${mid})`, offset: .58, easing: "cubic-bezier(.7,0,.85,.4)" }, // 2. hollows, to the centre
+      { transform: `translate(${dx}px,${dy}px) rotate(10deg) scale(${big})` }                                       // 3. swells like a doorway
     ], { duration: T, fill: "forwards" });
-    note.animate([{ color }, { color, offset: .22 }, { color: "#000", offset: .5 }, { color: "#000" }], { duration: T, fill: "forwards" });
+    note.animate([{ color }, { color, offset: .2 }, { color: roomBg, offset: .5 }, { color: roomBg }], { duration: T, fill: "forwards" });
     await done(move, T);
-    scene.style.background = "#000";                                                                               // 4. black
+    scene.style.background = roomBg;                                                                               // 4. a clean page
     location.href = link.href;
   });
 

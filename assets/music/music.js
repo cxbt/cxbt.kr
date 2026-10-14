@@ -381,9 +381,12 @@
     const big = Math.hypot(W, H) / 2 / (r.height * NOTE_HEAD.r) * 1.3;
     const mid = Math.min(7, Math.max(4, W / 160));
     note.style.transformOrigin = `${hx}px ${hy}px`;
-    note.style.color = getComputedStyle(btn).color;
-    // a black note would vanish into the black room, so on a dark home it carries a hairline edge
-    if (bg === "#000000") note.style.cssText += ";stroke:rgba(255,255,255,.55);stroke-width:1";
+    // the note hollows into an outline and swells like a doorway, wiping the room down to the shared
+    // background colour (the room and the home page always share it) before the browser moves on
+    const ink = getComputedStyle(btn).color;
+    note.style.color = ink;
+    note.style.stroke = ink;
+    note.style.strokeWidth = "1.5";
     $$("path", note).forEach(p => p.setAttribute("vector-effect", "non-scaling-stroke"));
     document.body.append(scene);
     btn.classList.add("is-launching");
@@ -395,8 +398,7 @@
       { transform: `translate(${dx}px,${dy}px) rotate(6deg) scale(${mid})`, offset: .58, easing: "cubic-bezier(.7,0,.85,.4)" },
       { transform: `translate(${dx}px,${dy}px) rotate(-10deg) scale(${big})` }
     ], { duration: T, fill: "forwards" });
-    const c0 = note.style.color;
-    note.animate([{ color: c0 }, { color: c0, offset: .25 }, { color: bg, offset: .55 }, { color: bg }], { duration: T, fill: "forwards" });
+    note.animate([{ color: ink }, { color: ink, offset: .2 }, { color: bg, offset: .5 }, { color: bg }], { duration: T, fill: "forwards" });
     await done(move, T);
     scene.style.background = bg;
     location.href = href;
@@ -408,6 +410,16 @@
     $$(".is-launching").forEach(b => b.classList.remove("is-launching"));
     busy = false;
   });
+
+  // with the home theme on "auto", follow the system switching between light and dark while the room is open
+  try {
+    if ((localStorage.getItem("nostyleplease-appearance") || "auto") === "auto") {
+      matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+        if (e.matches) root.removeAttribute("data-room"); else root.setAttribute("data-room", "light");
+        const m = $('meta[name="theme-color"]'); if (m) m.content = e.matches ? "#000000" : "#ffffff";
+      });
+    }
+  } catch {}
 
   /* ───────────── boot ───────────── */
   if (!$("#stage")) return; // nothing synced yet: the empty state needs no motion
