@@ -46,8 +46,11 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 
 ### B. 브라우저 헤더 (OAuth 가 HTTP 400 으로 실패할 때)
 
-1. 브라우저에서 `https://music.youtube.com` 에 로그인한 상태로 개발자 도구(F12) → **Network** 탭을 엽니다.
-2. 보관함을 열거나 스크롤해서 `browse` 로 시작하는 **POST** 요청을 찾고, 요청 헤더 전체를 복사합니다.
+> **Firefox 를 쓰세요.** 최신 Chrome(Windows)은 Google 로그인 쿠키를 기기에 묶어(Device Bound Session Credentials) 몇 분마다 갱신하므로,
+> Chrome 에서 복사한 쿠키는 금방 로그아웃 상태(`logged_in=0`, 페이지 `LOGGED_IN=false`)가 됩니다.
+
+1. **Firefox**(일반 창, 사생활 보호 창 아님)에서 `https://music.youtube.com` 에 로그인한 상태로 개발자 도구(F12) → **네트워크** 탭을 엽니다.
+2. 보관함을 열거나 스크롤해서 `browse` 로 시작하는 **POST** 요청을 찾고, 요청 헤더에서 **원본(Raw)** 을 켠 뒤 전체를 복사합니다.
 3. ```bash
    ytmusicapi browser --file browser.json
    ```
