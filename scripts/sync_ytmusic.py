@@ -59,6 +59,20 @@ class ConfigError(SyncError):
 # ───────────────────────────── fetching ─────────────────────────────
 
 
+def safe(exc: BaseException, limit: int = 300) -> str:
+    """A one-line description of an error, with anything token-like blanked out."""
+    text = re.sub(r"[A-Za-z0-9_\-=/+.%]{32,}", "…", f"{type(exc).__name__}: {exc}")
+    text = " ".join(text.split())
+    return text[:limit]
+
+
+def annotate(message: str) -> None:
+    """Surface the failure on the GitHub Actions run summary, not only in the log."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        print(f"::error title=Music sync failed::{message}", flush=True)
+
+
+
 def make_client() -> Any:
     raw = os.environ.get("YTMUSIC_AUTH", "").strip()
     if not raw:
@@ -96,7 +110,7 @@ def fetch_library(client: Any) -> list[dict[str, Any]]:
         if status and status.group(1) == "400":
             # what an expired/invalid OAuth token or cookie looks like in practice
             raise AuthError("YouTube Music answered HTTP 400; the credentials are most likely expired or invalid") from None
-        raise SyncError(f"YouTube Music request failed ({status.group(0) if status else type(exc).__name__})") from None
+        raise SyncError(f"YouTube Music request failed: {safe(exc)}") from None
     except YTMusicUserError as exc:
         raise AuthError(f"not authenticated ({type(exc).__name__})") from None
     except (KeyError, IndexError, TypeError, AttributeError) as exc:
@@ -281,9 +295,11 @@ def main(argv: list[str] | None = None) -> int:
     except SyncError as exc:
         kind = {2: "auth", 3: "api-format", 4: "guard", 5: "config"}.get(exc.code, "error")
         log.error("[%s] %s — %s left unchanged", kind, exc, args.out)
+        annotate(f"[{kind}] {exc}")
         return exc.code
     except Exception as exc:  # network errors and the like
-        log.error("[error] %s — %s left unchanged", type(exc).__name__, args.out)
+        log.error("[error] %s — %s left unchanged", safe(exc), args.out)
+        annotate(f"[error] {safe(exc)}")
         return 1
 
     gh_out = os.environ.get("GITHUB_OUTPUT")
