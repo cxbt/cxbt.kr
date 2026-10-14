@@ -73,8 +73,13 @@ def annotate(message: str) -> None:
 
 
 
-def make_client() -> Any:
-    raw = os.environ.get("YTMUSIC_AUTH", "").strip()
+# Browser-copied headers carry browser-only extras (x-browser-validation, x-client-data, priority, ...)
+# that Google's front end can reject with a bare HTML 400. Only these are needed to act as the user.
+BROWSER_KEEP = {"cookie", "x-goog-authuser", "x-goog-pageid", "authorization"}
+
+
+def read_auth() -> dict[str, Any]:
+    raw = os.environ.get("YTMUSIC_AUTH", "").strip().lstrip("﻿")
     if not raw:
         raise ConfigError("YTMUSIC_AUTH is not set")
     try:
@@ -83,8 +88,46 @@ def make_client() -> Any:
         raise ConfigError("YTMUSIC_AUTH is not valid JSON") from None
     if not isinstance(auth, dict):
         raise ConfigError("YTMUSIC_AUTH must be a JSON object")
+    return auth
+
+
+def browser_headers(auth: dict[str, Any]) -> dict[str, Any]:
+    from ytmusicapi.helpers import initialize_headers
+
+    kept = {k.lower(): v.strip() if isinstance(v, str) else v for k, v in auth.items() if k.lower() in BROWSER_KEEP}
+    if "cookie" not in kept:
+        raise ConfigError("browser auth has no cookie header; copy the headers of a music.youtube.com /browse request")
+    if "SAPISID" not in str(kept["cookie"]):
+        raise ConfigError("the cookie has no SAPISID entry; it was copied from a signed-out page or got cut off")
+    kept.setdefault("x-goog-authuser", "0")
+    kept.setdefault("authorization", "SAPISIDHASH")  # recomputed by ytmusicapi on every request
+    return {**dict(initialize_headers()), **kept}
+
+
+def inspect_auth() -> None:
+    """Print the shape of YTMUSIC_AUTH (header names, value lengths, cookie names) without any values."""
+    auth = read_auth()
+    kind = "oauth" if "refresh_token" in auth else "browser"
+    print(f"auth type: {kind}")
+    for key in sorted(auth, key=str.lower):
+        value = auth[key]
+        text = value if isinstance(value, str) else json.dumps(value)
+        flags = [f for f, bad in (("non-ascii", any(ord(c) > 126 for c in text)), ("newline", "\n" in text or "\r" in text), ("edge-space", text != text.strip())) if bad]
+        used = "keep" if kind == "oauth" or key.lower() in BROWSER_KEEP else "drop"
+        print(f"  {key:28} {len(text):5d} chars  {used}  {' '.join(flags)}")
+    cookie = next((v for k, v in auth.items() if k.lower() == "cookie"), None)
+    if kind == "browser" and isinstance(cookie, str):
+        names = sorted({c.split("=", 1)[0].strip() for c in cookie.split(";") if "=" in c})
+        print(f"  cookie names: {', '.join(names)}")
+
+
+def make_client() -> Any:
+    auth = read_auth()
 
     from ytmusicapi import OAuthCredentials, YTMusic
+
+    if "refresh_token" not in auth:
+        auth = browser_headers(auth)
 
     client_id = os.environ.get("YTMUSIC_OAUTH_CLIENT_ID", "").strip()
     client_secret = os.environ.get("YTMUSIC_OAUTH_CLIENT_SECRET", "").strip()
@@ -333,9 +376,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="album data file (default: data/music/albums.json)")
     parser.add_argument("--from-file", type=Path, help="read a saved get_library_albums() response instead of calling YouTube Music")
     parser.add_argument("--dry-run", action="store_true", help="report what would change without writing")
+    parser.add_argument("--inspect-auth", action="store_true", help="show header names and lengths of YTMUSIC_AUTH (no values) and exit")
     parser.add_argument("--allow-mass-removal", action="store_true", help="accept removing more than 20%% of the library in one run")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+
+    if args.inspect_auth:
+        try:
+            inspect_auth()
+        except SyncError as exc:
+            log.error("%s", exc)
+            return exc.code
+        return 0
 
     if args.from_file:
         fetch = lambda: json.loads(args.from_file.read_text(encoding="utf-8"))  # noqa: E731

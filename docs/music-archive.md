@@ -97,6 +97,8 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 | 증상 (Actions 로그) | 조치 |
 |---|---|
 | `[config] YTMUSIC_AUTH is not set` / `Music sync skipped` 경고 | Secrets 등록 |
+| `[auth] … not signed in` | 쿠키·토큰이 로그아웃 상태. 다시 만들어 `YTMUSIC_AUTH` 덮어쓰기 |
+| `… with text/html … instead of JSON` | 응답이 JSON 이 아님. `python scripts/sync_ytmusic.py --inspect-auth` 로 헤더 이름·길이(값은 출력 안 함)를 확인 |
 | `[auth] … HTTP 400/401/403` | 토큰·쿠키 만료. 2장 절차로 다시 만들어 `YTMUSIC_AUTH` 덮어쓰기. OAuth 가 계속 400 이면 B 방식으로 전환 |
 | `[api-format] …` | YouTube Music 응답이 바뀜. `scripts/requirements.txt` 의 `ytmusicapi` 버전을 최신으로 올려 보기 |
 | `[guard] …` | 보관함을 실제로 크게 정리했다면 allow_mass_removal 로 수동 실행, 아니면 다음 실행 대기 |
