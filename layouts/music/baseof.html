@@ -16,7 +16,7 @@ if(p==="light"||(p!=="dark"&&!matchMedia("(prefers-color-scheme: dark)").matches
 try{if(sessionStorage.getItem("cxbt:music-enter")){sessionStorage.removeItem("cxbt:music-enter");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("is-entering")}}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
   {{- $css := resources.Get "music/music.css" | minify | fingerprint "sha512" }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{- $js := resources.Get "music/music.js" | js.Build (dict "minify" true "target" "es2020") | fingerprint "sha512" }}
