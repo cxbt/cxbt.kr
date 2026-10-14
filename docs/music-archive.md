@@ -20,18 +20,19 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 
 ## 2. 최초 인증 설정 (한 번만)
 
-`ytmusicapi` 는 비공식 라이브러리입니다. 인증 방식은 두 가지이며 **OAuth 를 먼저 시도하고, HTTP 400 오류가 나면 브라우저 방식**을 쓰세요.
-(2024년 말부터 일부 계정에서 OAuth 요청이 `HTTP 400 INVALID_ARGUMENT` 로 거부되는 사례가 보고되어 있습니다.)
+`ytmusicapi` 는 비공식 라이브러리입니다. **현재 이 보관함은 Firefox 브라우저 헤더 방식으로 동기화합니다.**
+2026-10-15 확인 결과, `jhyun2438@gmail.com` 에서 새 OAuth 토큰 발급은 성공했지만 `ytmusicapi` 1.12.3의 YouTube Music 내부 API 요청은 `HTTP 400 INVALID_ARGUMENT` 로 거부됐습니다. 앱을 프로덕션으로 게시해도 이 오류는 해결되지 않았습니다. [ytmusicapi의 관련 이슈](https://github.com/sigma67/ytmusicapi/issues/813)를 참고하세요.
 
-### A. OAuth (권장: 토큰이 자동 갱신됨)
+### A. OAuth (현재 이 계정의 동기화에는 사용하지 않음)
 
 1. [Google Cloud Console](https://console.cloud.google.com/) 에서 새 프로젝트를 만듭니다.
 2. **API 및 서비스 → 라이브러리** 에서 *YouTube Data API v3* 를 사용 설정합니다.
-3. **OAuth 동의 화면**: 사용자 유형 *외부*, 앱 이름 아무거나, 본인 이메일을 테스트 사용자로 추가합니다.
-   - **게시 상태를 "프로덕션"으로 전환하세요.** "테스트" 상태에서는 Refresh Token 이 7일 뒤 만료되어 동기화가 멈춥니다.
-     (검증 안 된 앱 경고가 뜨지만 본인만 쓰므로 괜찮습니다.)
+3. **Google Auth Platform → 대상(Audience)**: 사용자 유형 *외부*로 설정하고 본인 Google 계정을 테스트 사용자로 추가합니다. 처음에는 *테스트* 상태에서 인증이 되는지 확인하세요. 테스트 사용자 목록에 없으면 로그인이 차단될 수 있습니다.
+   - 장기 동기화 전에는 같은 화면의 **앱 게시(Publish app)** 를 눌러 게시 상태를 *프로덕션(In production)* 으로 바꿉니다. [Google 문서](https://support.google.com/cloud/answer/15549945)에 따르면 외부 앱의 *테스트* 상태에서 발급한 Refresh Token 은 7일 후 만료됩니다. 게시 상태를 바꾼 뒤에는 아래 명령으로 **새 `oauth.json`을 발급**해 확인하세요.
+   - 이 아카이브처럼 본인만 쓰는 앱은 [Google의 개인 사용 예외](https://support.google.com/cloud/answer/13464323)에 해당할 수 있습니다. 미인증 앱 경고가 나오면 본인 앱임을 확인한 뒤 진행할 수 있지만, Google Workspace 관리자 정책이나 계정의 고급 보호 설정은 별도로 접근을 막을 수 있습니다. 게시 상태 전환과 **브랜딩 인증 신청**은 다른 절차입니다.
+   - 브랜딩 인증에서 홈페이지 소유권·개인정보처리방침 문제가 나왔다면 이는 심사 보완 요청입니다. 게시 상태 전환 버튼이 있는 *대상(Audience)* 화면과 구별하세요. 실제로 Google 인증 심사를 완료하려면 [브랜딩 인증 요건](https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification)에 따라 도메인 소유권과 개인정보처리방침을 보완해야 합니다.
 4. **사용자 인증 정보 → OAuth 클라이언트 ID 만들기**, 유형은 **TV 및 제한된 입력 기기** 를 고릅니다. 클라이언트 ID 와 보안 비밀을 메모합니다.
-5. 내 컴퓨터에서 토큰을 만듭니다 (저장소 폴더 **밖**에서 실행하는 것을 권장).
+5. 내 컴퓨터에서 토큰을 만듭니다 (저장소 폴더 **밖**에서 실행하는 것을 권장). *테스트* 상태에서 발급한 토큰은 *프로덕션* 전환 후 다시 발급하세요.
    ```bash
    pip install ytmusicapi==1.12.3
    ytmusicapi oauth --client-id "<클라이언트 ID>" --client-secret "<보안 비밀>" --file oauth.json
@@ -44,10 +45,9 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
    ```
    `INFO library: N albums fetched …` 가 나오면 성공입니다.
 
-### B. 브라우저 헤더 (OAuth 가 HTTP 400 으로 실패할 때)
+### B. Firefox 브라우저 헤더 (현재 사용 중)
 
-> **Firefox 를 쓰세요.** 최신 Chrome(Windows)은 Google 로그인 쿠키를 기기에 묶어(Device Bound Session Credentials) 몇 분마다 갱신하므로,
-> Chrome 에서 복사한 쿠키는 금방 로그아웃 상태(`logged_in=0`, 페이지 `LOGGED_IN=false`)가 됩니다.
+> **Firefox 를 먼저 시도하세요.** Chrome 에서 복사한 쿠키가 다른 프로세스에서 로그아웃으로 판정된 사례가 있습니다. 기기 결합 세션 등이 원인일 수 있지만 이 계정에서 확인된 사실은 아닙니다.
 
 1. **Firefox**(일반 창, 사생활 보호 창 아님)에서 `https://music.youtube.com` 에 로그인한 상태로 개발자 도구(F12) → **네트워크** 탭을 엽니다.
 2. 보관함을 열거나 스크롤해서 `browse` 로 시작하는 **POST** 요청을 찾고, 요청 헤더에서 **원본(Raw)** 을 켠 뒤 전체를 복사합니다.
@@ -55,7 +55,7 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
    ytmusicapi browser --file browser.json
    ```
    를 실행하고 복사한 헤더를 붙여 넣습니다.
-4. 이 방식은 브라우저 로그인 쿠키를 쓰므로 **그 브라우저에서 로그아웃하면 만료**됩니다. 동기화 전용 브라우저 프로필을 쓰고 로그아웃하지 마세요.
+4. 이 방식은 브라우저 로그인 쿠키를 쓰므로 **그 브라우저에서 로그아웃하거나 세션이 만료되면 다시 복사해야 합니다.** 동기화 전용 브라우저 프로필을 쓰고 로그아웃하지 마세요. Google이 세션을 언제 갱신하거나 무효화할지는 보장할 수 없습니다.
 5. 확인: `export YTMUSIC_AUTH="$(cat browser.json)"; python scripts/sync_ytmusic.py --dry-run`
 
 ### GitHub Secrets 등록
@@ -102,7 +102,8 @@ YouTube Music 보관함에 저장한 앨범을 6시간마다 가져와 `https://
 | `[config] YTMUSIC_AUTH is not set` / `Music sync skipped` 경고 | Secrets 등록 |
 | `[auth] … not signed in` | 쿠키·토큰이 로그아웃 상태. 다시 만들어 `YTMUSIC_AUTH` 덮어쓰기 |
 | `… with text/html … instead of JSON` | 응답이 JSON 이 아님. `python scripts/sync_ytmusic.py --inspect-auth` 로 헤더 이름·길이(값은 출력 안 함)를 확인 |
-| `[auth] … HTTP 400/401/403` | 토큰·쿠키 만료. 2장 절차로 다시 만들어 `YTMUSIC_AUTH` 덮어쓰기. OAuth 가 계속 400 이면 B 방식으로 전환 |
+| `[auth] … OAuth with HTTP 400` | OAuth 토큰을 새로 발급해도 발생할 수 있는 YouTube Music 내부 API 오류. B 방식으로 동기화 |
+| `[auth] … HTTP 400 with browser auth` / `HTTP 401/403` | Firefox 로그인 세션과 요청 헤더를 확인하고 새로 복사해 `YTMUSIC_AUTH` 덮어쓰기 |
 | `[api-format] …` | YouTube Music 응답이 바뀜. `scripts/requirements.txt` 의 `ytmusicapi` 버전을 최신으로 올려 보기 |
 | `[guard] …` | 보관함을 실제로 크게 정리했다면 allow_mass_removal 로 수동 실행, 아니면 다음 실행 대기 |
 | 예약 실행이 멈춤 | 저장소에 60일간 활동이 없으면 GitHub 이 예약 워크플로를 끕니다. **Actions → Deploy → Enable workflow** |

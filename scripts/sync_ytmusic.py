@@ -256,6 +256,7 @@ def signed_in(client: Any) -> bool | None:
 
 
 def fetch_library(client: Any) -> list[dict[str, Any]]:
+    from ytmusicapi.auth.types import AuthType
     from ytmusicapi.exceptions import YTMusicServerError, YTMusicUserError
 
     try:
@@ -280,8 +281,9 @@ def fetch_library(client: Any) -> list[dict[str, Any]]:
         if status and status.group(1) in {"401", "403"}:
             raise AuthError(f"YouTube Music rejected the credentials (HTTP {status.group(1)})") from None
         if status and status.group(1) == "400":
-            # what an expired/invalid OAuth token or cookie looks like in practice
-            raise AuthError("YouTube Music answered HTTP 400; the credentials are most likely expired or invalid") from None
+            if client.auth_type in (AuthType.OAUTH_CUSTOM_CLIENT, AuthType.OAUTH_CUSTOM_FULL):
+                raise AuthError("YouTube Music rejected OAuth with HTTP 400; a valid token can still fail at its internal API (ytmusicapi issue #813)") from None
+            raise AuthError("YouTube Music answered HTTP 400 with browser auth; check the copied headers and account session") from None
         raise SyncError(f"YouTube Music request failed: {safe(exc)}") from None
     except YTMusicUserError as exc:
         raise AuthError(f"not authenticated ({type(exc).__name__})") from None

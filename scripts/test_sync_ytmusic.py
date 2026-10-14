@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sync_ytmusic as s  # noqa: E402
@@ -29,6 +30,10 @@ def raw(i, title=None, **extra):
 
 class SyncTest(unittest.TestCase):
     def setUp(self):
+        # Expected failure cases must not emit GitHub Actions error annotations.
+        annotation_patch = patch.object(s, "annotate")
+        annotation_patch.start()
+        self.addCleanup(annotation_patch.stop)
         self.dir = tempfile.TemporaryDirectory()
         self.out = Path(self.dir.name) / "albums.json"
         self.notes = Path(self.dir.name) / "music-notes"
