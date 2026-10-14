@@ -92,16 +92,61 @@ def make_client() -> Any:
     if is_oauth and not (client_id and client_secret):
         raise ConfigError("OAuth auth needs YTMUSIC_OAUTH_CLIENT_ID and YTMUSIC_OAUTH_CLIENT_SECRET")
     creds = OAuthCredentials(client_id=client_id, client_secret=client_secret) if is_oauth else None
+    session = requests_session()
     try:
-        return YTMusic(auth, oauth_credentials=creds)
+        return YTMusic(auth, oauth_credentials=creds, requests_session=session)
     except Exception as exc:  # message may echo header values, so only the type is logged
         raise AuthError(f"could not initialise the client ({type(exc).__name__})") from None
+
+
+LAST_RESPONSE: dict[str, Any] = {}
+
+
+def requests_session() -> Any:
+    """A session that remembers the status and shape of the last response (never its headers or cookies),
+    so a non-JSON answer from YouTube Music can be described instead of surfacing as a bare JSONDecodeError."""
+    import requests
+
+    def remember(response: Any, *args: Any, **kwargs: Any) -> None:
+        body = response.text[:4000] if response.content else ""
+        title = re.search(r"<title[^>]*>([^<]{0,120})", body, re.I)
+        LAST_RESPONSE.update(
+            status=response.status_code,
+            type=response.headers.get("content-type", "").split(";")[0],
+            title=" ".join(title.group(1).split()) if title else "",
+            empty=not body.strip(),
+            redirected=bool(response.history),
+            host=re.sub(r"^https?://([^/]+).*$", r"\1", response.url),
+        )
+
+    session = requests.Session()
+    session.hooks["response"].append(remember)
+    return session
+
+
+def describe_non_json() -> str:
+    r = LAST_RESPONSE
+    if not r:
+        return "YouTube Music returned something that is not JSON"
+    what = "an empty body" if r.get("empty") else f"{r.get('type') or 'unknown content'}" + (f" titled '{r['title']}'" if r.get("title") else "")
+    hint = ""
+    if r.get("status") in (429, 403) or "sorry" in r.get("title", "").lower():
+        hint = "; Google is likely blocking requests from this machine's IP (common on CI runners)"
+    elif r.get("redirected") or r.get("host", "").startswith(("accounts.", "consent.")):
+        hint = "; the request was redirected to a sign-in/consent page, so the cookie is probably invalid or incomplete"
+    return f"YouTube Music answered HTTP {r.get('status')} from {r.get('host')} with {what} instead of JSON{hint}"
 
 
 def fetch_library(client: Any) -> list[dict[str, Any]]:
     from ytmusicapi.exceptions import YTMusicServerError, YTMusicUserError
 
     try:
+        # YouTube Music answers a signed-out request with an empty library rather than an error,
+        # so confirm the session is signed in before trusting an empty or short result.
+        try:
+            client.get_account_info()
+        except (KeyError, IndexError, TypeError):
+            raise AuthError("the credentials are not signed in to YouTube Music (no account menu); the cookie or token is invalid or expired") from None
         items = client.get_library_albums(limit=None, order="recently_added")
     except YTMusicServerError as exc:
         status = re.search(r"HTTP (\d{3})", str(exc))
@@ -113,6 +158,14 @@ def fetch_library(client: Any) -> list[dict[str, Any]]:
         raise SyncError(f"YouTube Music request failed: {safe(exc)}") from None
     except YTMusicUserError as exc:
         raise AuthError(f"not authenticated ({type(exc).__name__})") from None
+    except ValueError as exc:  # json.JSONDecodeError: the body was HTML or empty
+        if type(exc).__name__ != "JSONDecodeError":
+            raise
+        status = LAST_RESPONSE.get("status")
+        message = describe_non_json()
+        if status in (401, 403) or LAST_RESPONSE.get("redirected"):
+            raise AuthError(message) from None
+        raise SyncError(message) from None
     except (KeyError, IndexError, TypeError, AttributeError) as exc:
         raise ApiFormatError(f"could not parse the library response ({type(exc).__name__}: {exc})") from None
     if not isinstance(items, list):
